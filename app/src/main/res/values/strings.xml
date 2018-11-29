@@ -5,18 +5,21 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="add_question">Add question</string>
+    <string name="correctAnswer">----Correct answer----</string>
     <string name="delete_question">Delete question</string>
-    <string name="update_question">Update question</string>
+    <string name="display_question">Display Question</string>
     <string name="enterQuestion">Please enter your question</string>
     <string name="enterAllOptions">Please enter all the options</string>
     <string name="markCorrectAnswer">Choose correct answer</string>
-    <string name="correctAnswer">----Correct answer----</string>
-
-    <string name="typeQuestionsHere">Type your questions here</string>
     <string name="option1">Option 1</string>
     <string name="option2">Option 2</string>
     <string name="option3">Option 3</string>
     <string name="option4">Option 4</string>
+    <string name="typeQuestionsHere">Type your questions here</string>
+    <string name="update_question">Update question</string>
+
+
+
 
     <string-array name="options_entries">
         <item>Correct answer</item>

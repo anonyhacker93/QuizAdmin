@@ -30,6 +30,7 @@ public class HomeFragment extends Fragment {
         Button btnAddQuestion = view.findViewById(R.id.btn_home_add_question);
         Button btnUpdateQuestion = view.findViewById(R.id.btn_home_update_question);
         Button btnDeleteQuestion = view.findViewById(R.id.btn_home_delete_question);
+        Button btnDisplayQuestion = view.findViewById(R.id.btn_home_display_question);
 
         btnAddQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,6 +46,12 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        btnDisplayQuestion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addFragment(new QuestionDisplayFragment());
+            }
+        });
         return view;
     }
     private void addFragment(Fragment fragment) {

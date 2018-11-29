@@ -25,5 +25,11 @@
             android:text="@string/delete_question"
             />
 
+        <Button
+            android:id="@+id/btn_home_display_question"
+            style="@style/width_match_parent"
+            android:text="@string/display_question"
+            />
+
     </LinearLayout>
 </LinearLayout>
