@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">QuizAdmin</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="add_question">Add question</string>
+    <string name="typeQuestionsHere">Type your questions here</string>
+    <string name="option1">Option 1</string>
+    <string name="option2">Option 2</string>
+    <string name="option3">Option 3</string>
+    <string name="option4">Option 4</string>
+
+    <string-array name="options_entries">
+        <item>Correct answer</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
+</resources>

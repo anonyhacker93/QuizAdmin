@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/both_match_parent"
+    android:orientation="vertical"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:orientation="vertical"
+        >
+        <EditText
+            android:id="@+id/edit_text_question"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:inputType="text|textMultiLine"
+            android:gravity="top"
+            android:hint="@string/typeQuestionsHere"
+            />
+
+        <LinearLayout
+            style="@style/both_match_parent"
+            android:orientation="vertical"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="10dp"
+            >
+
+            <EditText
+                android:id="@+id/option1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/option1"
+                android:layout_marginTop="10dp"
+                />
+            <EditText
+                android:id="@+id/option2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/option2"
+                android:layout_marginTop="10dp"
+                />
+            <EditText
+                android:id="@+id/option3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/option3"
+                android:layout_marginTop="10dp"
+                />
+            <EditText
+                android:id="@+id/option4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/option4"
+                android:layout_marginTop="10dp"
+                />
+
+            <Spinner
+                android:id="@+id/correctAnsrSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="37dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:autofillHints="Right Option"
+                android:entries="@array/options_entries"
+
+                ></Spinner>
+        </LinearLayout>
+        <Button
+            android:id="@+id/addQuestionBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/add_question"
+            />
+    </LinearLayout>
+
+</LinearLayout>
+
