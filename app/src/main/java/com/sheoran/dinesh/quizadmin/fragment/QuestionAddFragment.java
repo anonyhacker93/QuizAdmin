@@ -17,14 +17,17 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.sheoran.dinesh.quizadmin.Questions;
 import com.sheoran.dinesh.quizadmin.R;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class QuestionAddFragment extends Fragment {
+    private final static String BASE_CHILD_NAME = "Question";
     private Button submitQuestion;
     private EditText question;
     private EditText option1;
@@ -33,7 +36,8 @@ public class QuestionAddFragment extends Fragment {
     private EditText option4;
     private Spinner answerSpinner;
     private DatabaseReference usersReference;
-    private int idNo=200;
+    private int idNo = 200;
+
     public QuestionAddFragment() {
         // Required empty public constructor
     }
@@ -57,6 +61,7 @@ public class QuestionAddFragment extends Fragment {
         option4 = (EditText) view.findViewById(R.id.option4);
         answerSpinner = (Spinner) view.findViewById(R.id.correctAnsrSpinner);
         initFirebase();
+        initId();
         addOptionsToSpinner();
         submitQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +77,45 @@ public class QuestionAddFragment extends Fragment {
         });
 
         return view;
+    }
+
+
+    private void initFirebase() {
+        FirebaseApp.initializeApp(getContext());
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        usersReference = firebaseDatabase.getReference("Question");
+
+
+    }
+
+    private void initId() {
+
+        DatabaseReference dbref = FirebaseDatabase.getInstance().getReference();
+        Query lastchield =
+                dbref.child(BASE_CHILD_NAME).orderByKey().limitToLast(1);
+        lastchield.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot ds) {
+                Iterator<DataSnapshot> itr = ds.getChildren().iterator();
+                String key = null;
+                while (itr.hasNext()) {
+                    DataSnapshot shot = itr.next();
+                    key = shot.getKey();
+                }
+                if (key != null) {
+                    idNo = Integer.parseInt(key);
+                    idNo++;
+                }
+                {
+                    idNo = 0;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void checkValidFields() {
@@ -94,7 +138,6 @@ public class QuestionAddFragment extends Fragment {
         }
     }
 
-
     private void saveQuestion() {
         idNo++;
         String id = Integer.toString(idNo);
@@ -110,16 +153,15 @@ public class QuestionAddFragment extends Fragment {
             ans = opt1;
         } else if (indx == 2) {
             ans = opt2;
-        }else if (indx == 3) {
+        } else if (indx == 3) {
             ans = opt3;
-        }else if (indx == 4) {
+        } else if (indx == 4) {
             ans = opt4;
         }
 
-        Questions questions = new Questions(id,ques,opt1,opt2,opt3,opt4,ans);
+        Questions questions = new Questions(id, ques, opt1, opt2, opt3, opt4, ans);
         uploadOnFirebase(questions);
     }
-
 
     private void addOptionsToSpinner() {
         List<String> list = new ArrayList<String>();
@@ -160,15 +202,6 @@ public class QuestionAddFragment extends Fragment {
         answerSpinner.setSelection(0);
     }
 
-    private void initFirebase() {
-        FirebaseApp.initializeApp(getContext());
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        usersReference = firebaseDatabase.getReference("Question");
-
-
-
-    }
-
     private void uploadOnFirebase(final Questions questions) {
         usersReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -188,5 +221,6 @@ public class QuestionAddFragment extends Fragment {
             }
         });
     }
+
 
 }
