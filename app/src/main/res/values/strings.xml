@@ -7,7 +7,10 @@
     <string name="add_question">Add question</string>
     <string name="delete_question">Delete question</string>
     <string name="update_question">Update question</string>
-
+    <string name="enterQuestion">Please enter your question</string>
+    <string name="enterAllOptions">Please enter all the options</string>
+    <string name="markCorrectAnswer">Choose correct answer</string>
+    <string name="correctAnswer">----Correct answer----</string>
 
     <string name="typeQuestionsHere">Type your questions here</string>
     <string name="option1">Option 1</string>
