@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout style="@style/both_match_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout
+        style="@style/both_match_parent"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="20dp"
+        android:layout_gravity="center"
+        >
+        <Button
+            android:id="@+id/btn_home_add_question"
+            style="@style/width_match_parent"
+            android:text="@string/add_question"
+            />
+        <Button
+            android:id="@+id/btn_home_update_question"
+            style="@style/width_match_parent"
+            android:text="@string/update_question"
+            />
+        <Button
+            android:id="@+id/btn_home_delete_question"
+            style="@style/width_match_parent"
+            android:text="@string/delete_question"
+            />
+
+    </LinearLayout>
+</LinearLayout>
