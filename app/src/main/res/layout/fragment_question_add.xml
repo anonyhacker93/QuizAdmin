@@ -13,11 +13,12 @@
             android:id="@+id/edit_text_question"
             android:layout_width="match_parent"
             android:layout_height="100dp"
+            android:imeOptions="actionNext"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="10dp"
             android:gravity="top"
             android:hint="@string/typeQuestionsHere"
-            android:inputType="text|textMultiLine" />
+            android:inputType="text|textImeMultiLine" />
 
         <LinearLayout
             style="@style/both_match_parent"
@@ -29,6 +30,8 @@
                 android:id="@+id/option1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
+                android:singleLine="true"
                 android:layout_marginTop="10dp"
                 android:hint="@string/option1" />
 
@@ -36,6 +39,8 @@
                 android:id="@+id/option2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
+                android:singleLine="true"
                 android:layout_marginTop="10dp"
                 android:hint="@string/option2" />
 
@@ -43,6 +48,8 @@
                 android:id="@+id/option3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
+                android:singleLine="true"
                 android:layout_marginTop="10dp"
                 android:hint="@string/option3" />
 
@@ -50,6 +57,8 @@
                 android:id="@+id/option4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
+                android:singleLine="true"
                 android:layout_marginTop="10dp"
                 android:hint="@string/option4" />
 
