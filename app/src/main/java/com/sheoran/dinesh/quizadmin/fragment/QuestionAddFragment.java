@@ -127,11 +127,11 @@ public class QuestionAddFragment extends Fragment {
     }
 
     private void resetAllFields() {
-        question.setText(" ");
-        option1.setText(" ");
-        option2.setText(" ");
-        option3.setText(" ");
-        option4.setText(" ");
+        question.setText("");
+        option1.setText("");
+        option2.setText("");
+        option3.setText("");
+        option4.setText("");
         answerSpinner.setSelection(0);
     }
 
