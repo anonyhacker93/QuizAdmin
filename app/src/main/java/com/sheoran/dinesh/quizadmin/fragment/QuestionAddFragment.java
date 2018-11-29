@@ -1,10 +1,7 @@
 package com.sheoran.dinesh.quizadmin.fragment;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,22 +36,22 @@ public class QuestionAddFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_question_add, container, false);
-        submitQuestion = (Button)view.findViewById(R.id.addQuestionBtn);
-        question = (EditText)view.findViewById(R.id.edit_text_question);
-        option1 = (EditText)view.findViewById(R.id.option1);
-        option2 = (EditText)view.findViewById(R.id.option2);
-        option3 = (EditText)view.findViewById(R.id.option3);
-        option4 = (EditText)view.findViewById(R.id.option4);
-        answerSpinner = (Spinner)view.findViewById(R.id.correctAnsrSpinner);
+        submitQuestion = (Button) view.findViewById(R.id.addQuestionBtn);
+        question = (EditText) view.findViewById(R.id.edit_text_question);
+        option1 = (EditText) view.findViewById(R.id.option1);
+        option2 = (EditText) view.findViewById(R.id.option2);
+        option3 = (EditText) view.findViewById(R.id.option3);
+        option4 = (EditText) view.findViewById(R.id.option4);
+        answerSpinner = (Spinner) view.findViewById(R.id.correctAnsrSpinner);
         submitQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (question.length() == 0){
-                    Toast.makeText(getContext(),"Please enter your question",Toast.LENGTH_LONG).show();
-                } else if (option1.length() == 0 || option2.length() == 0 || option3.length() == 0 || option4.length() == 0){
-                    Toast.makeText(getContext(),"Please enter all the options",Toast.LENGTH_LONG).show();
-                } else if (answerSpinner.getSelectedItemPosition() == 0){
-                    Toast.makeText(getContext(),"Enter a valid answer",Toast.LENGTH_LONG).show();
+                if (question.length() == 0) {
+                    Toast.makeText(getContext(), "Please enter your question", Toast.LENGTH_LONG).show();
+                } else if (option1.length() == 0 || option2.length() == 0 || option3.length() == 0 || option4.length() == 0) {
+                    Toast.makeText(getContext(), "Please enter all the options", Toast.LENGTH_LONG).show();
+                } else if (answerSpinner.getSelectedItemPosition() == 0) {
+                    Toast.makeText(getContext(), "Enter a valid answer", Toast.LENGTH_LONG).show();
                 }
                 resetAllFields();
             }

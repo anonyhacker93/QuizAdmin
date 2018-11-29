@@ -5,6 +5,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="add_question">Add question</string>
+    <string name="delete_question">Delete question</string>
+    <string name="update_question">Update question</string>
+
+
     <string name="typeQuestionsHere">Type your questions here</string>
     <string name="option1">Option 1</string>
     <string name="option2">Option 2</string>
