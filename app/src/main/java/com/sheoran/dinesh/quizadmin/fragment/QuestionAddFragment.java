@@ -65,8 +65,7 @@ public class QuestionAddFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 checkValidFields();
-                if (question.length() > 0 && option1.length() > 0 && option2.length() > 0 && option3.length() > 0 && option4.length() > 0
-                        && !answerSpinner.getSelectedItem().equals("----Correct answer----")) {
+                if (checkValidFields()) {
                     saveQuestion();
                     resetAllFields();
                 }
@@ -106,24 +105,23 @@ public class QuestionAddFragment extends BaseFragment {
         });
     }
 
-    private void checkValidFields() {
-        boolean isQuestionBlank = false;
-        boolean isOptionsBlank = false;
-        boolean isAnswerNotSelected = false;
+    private boolean checkValidFields() {
+        boolean isValid = true;
+        int errorMsg = -999;
         if (question.length() == 0) {
-            isQuestionBlank = true;
+            isValid = false;
+            errorMsg = R.string.enterQuestion;
         } else if (option1.length() == 0 || option2.length() == 0 || option3.length() == 0 || option4.length() == 0) {
-            isOptionsBlank = true;
+            isValid = false;
+            errorMsg = R.string.enterAllOptions;
         } else if (answerSpinner.getSelectedItem().equals("----Correct answer----")) {
-            isAnswerNotSelected = true;
+            isValid = false;
+            errorMsg =  R.string.markCorrectAnswer;
         }
-        if (isQuestionBlank) {
-            Toast.makeText(getContext(), R.string.enterQuestion, Toast.LENGTH_LONG).show();
-        } else if (isOptionsBlank) {
-            Toast.makeText(getContext(), R.string.enterAllOptions, Toast.LENGTH_LONG).show();
-        } else if (isAnswerNotSelected) {
-            Toast.makeText(getContext(), R.string.markCorrectAnswer, Toast.LENGTH_LONG).show();
+        if(errorMsg != -999){
+            Toast.makeText(getContext(), errorMsg, Toast.LENGTH_SHORT).show();
         }
+        return isValid;
     }
 
     private void saveQuestion() {

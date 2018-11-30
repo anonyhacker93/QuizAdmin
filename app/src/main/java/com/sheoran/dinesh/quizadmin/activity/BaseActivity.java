@@ -1,4 +1,4 @@
-package com.sheoran.dinesh.quizadmin;
+package com.sheoran.dinesh.quizadmin.activity;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+
+import com.sheoran.dinesh.quizadmin.R;
 
 //Dinesh Sheoran's
 public class BaseActivity extends AppCompatActivity {

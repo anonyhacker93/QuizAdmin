@@ -1,17 +1,11 @@
-package com.sheoran.dinesh.quizadmin;
+package com.sheoran.dinesh.quizadmin.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.widget.Button;
 
+import com.sheoran.dinesh.quizadmin.R;
 import com.sheoran.dinesh.quizadmin.fragment.HomeFragment;
-import com.sheoran.dinesh.quizadmin.fragment.QuestionAddFragment;
-import com.sheoran.dinesh.quizadmin.fragment.QuestionUpdateFragment;
 
 public class MainActivity extends BaseActivity {
 

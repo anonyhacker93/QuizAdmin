@@ -23,7 +23,7 @@ public class HomeFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         Button btnAddQuestion = view.findViewById(R.id.btn_home_add_question);
-        Button btnDeleteQuestion = view.findViewById(R.id.btn_home_delete_question);
+
         Button btnDisplayQuestion = view.findViewById(R.id.btn_home_display_question);
 
         btnAddQuestion.setOnClickListener(new View.OnClickListener() {
