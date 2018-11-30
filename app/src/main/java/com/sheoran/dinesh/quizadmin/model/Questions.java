@@ -2,7 +2,9 @@ package com.sheoran.dinesh.quizadmin.model;
 
 import com.sheoran.dinesh.quizadmin.firebase.IFirebasable;
 
-public class Questions implements IFirebasable{
+import java.io.Serializable;
+
+public class Questions implements IFirebasable,Serializable{
 
     private String id;
     private String question;

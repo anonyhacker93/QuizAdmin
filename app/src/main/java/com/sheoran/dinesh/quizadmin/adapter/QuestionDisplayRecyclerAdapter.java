@@ -1,25 +1,28 @@
 package com.sheoran.dinesh.quizadmin.adapter;
 
-import android.content.DialogInterface;
+import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.sheoran.dinesh.quizadmin.model.Questions;
 import com.sheoran.dinesh.quizadmin.R;
+import com.sheoran.dinesh.quizadmin.listener.CustomRecyclerClickListener;
+import com.sheoran.dinesh.quizadmin.model.Questions;
 
 import java.util.ArrayList;
 
 public class QuestionDisplayRecyclerAdapter extends RecyclerView.Adapter<QuestionDisplayRecyclerAdapter.MyViewHolder> {
-    ArrayList<Questions> questionsArrayList;
+    private ArrayList<Questions> questionsArrayList;
+    private Context _context;
+    private CustomRecyclerClickListener _clickListener;
 
-    public QuestionDisplayRecyclerAdapter(ArrayList<Questions> questions) {
+    public QuestionDisplayRecyclerAdapter(Context context, CustomRecyclerClickListener clickListener, ArrayList<Questions> questions) {
+        this._context = context;
+        this._clickListener = clickListener;
         this.questionsArrayList = questions;
     }
 
@@ -31,7 +34,7 @@ public class QuestionDisplayRecyclerAdapter extends RecyclerView.Adapter<Questio
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final MyViewHolder holder, int i) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int i) {
         Questions questions = questionsArrayList.get(i);
         final String id = questions.getId();
         String ques = questions.getQuestion();
@@ -40,38 +43,16 @@ public class QuestionDisplayRecyclerAdapter extends RecyclerView.Adapter<Questio
         holder.linearLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                AlertDialog.Builder deleteQuestion = new AlertDialog.Builder(v.getContext());
-                deleteQuestion.setMessage("Do you want to delete this question?");
-                deleteQuestion.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        deleteQuestion(id);
-
-                    }
-                });
-                deleteQuestion.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                deleteQuestion.show();
+                _clickListener.onLongClickListener(id);
                 return true;
             }
         });
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateQuestion(id);
+                _clickListener.onSingleClickListener(id);
             }
         });
-    }
-
-    private void updateQuestion(String id) {
-    }
-
-    private void deleteQuestion(String id){
-
     }
 
     @Override
