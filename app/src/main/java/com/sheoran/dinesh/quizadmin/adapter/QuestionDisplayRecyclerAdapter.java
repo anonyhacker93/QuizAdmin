@@ -1,6 +1,8 @@
 package com.sheoran.dinesh.quizadmin.adapter;
 
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +31,7 @@ public class QuestionDisplayRecyclerAdapter extends RecyclerView.Adapter<Questio
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int i) {
+    public void onBindViewHolder(@NonNull final MyViewHolder holder, int i) {
         Questions questions = questionsArrayList.get(i);
         final String id = questions.getId();
         String ques = questions.getQuestion();
@@ -38,8 +40,22 @@ public class QuestionDisplayRecyclerAdapter extends RecyclerView.Adapter<Questio
         holder.linearLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Toast.makeText(v.getContext(), "Do u want to delete/edit "+id, Toast.LENGTH_SHORT).show();
-                deleteQuestion(id);
+                AlertDialog.Builder deleteQuestion = new AlertDialog.Builder(v.getContext());
+                deleteQuestion.setMessage("Do you want to delete this question?");
+                deleteQuestion.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteQuestion(id);
+
+                    }
+                });
+                deleteQuestion.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                deleteQuestion.show();
                 return true;
             }
         });
