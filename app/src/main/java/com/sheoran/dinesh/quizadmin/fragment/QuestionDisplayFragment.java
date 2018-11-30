@@ -53,16 +53,16 @@ public class QuestionDisplayFragment extends Fragment {
         questions.setQuestion("What is ur name");
 
         Questions questions1 = new Questions();
-        questions.setId("301");
-        questions.setQuestion("What is ur mom name");
+        questions1.setId("301");
+        questions1.setQuestion("What is ur mom name");
 
         Questions questions2 = new Questions();
-        questions.setId("302");
-        questions.setQuestion("What is ur father name");
+        questions2.setId("302");
+        questions2.setQuestion("What is ur father name What is ur mom name What is ur mom name What is ur mom name");
 
         Questions questions3 = new Questions();
-        questions.setId("303");
-        questions.setQuestion("What is ur gf name");
+        questions3.setId("303");
+        questions3.setQuestion("What is ur gf name");
 
         questionArrayList.add(questions);
         questionArrayList.add(questions1);
