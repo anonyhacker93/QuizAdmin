@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.sheoran.dinesh.quizadmin.Questions;
+import com.sheoran.dinesh.quizadmin.model.Questions;
 import com.sheoran.dinesh.quizadmin.R;
 import com.sheoran.dinesh.quizadmin.adapter.QuestionDisplayRecyclerAdapter;
 

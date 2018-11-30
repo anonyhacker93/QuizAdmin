@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.sheoran.dinesh.quizadmin.Questions;
+import com.sheoran.dinesh.quizadmin.model.Questions;
 import com.sheoran.dinesh.quizadmin.R;
 
 import java.util.ArrayList;
@@ -39,9 +39,23 @@ public class QuestionDisplayRecyclerAdapter extends RecyclerView.Adapter<Questio
             @Override
             public boolean onLongClick(View v) {
                 Toast.makeText(v.getContext(), "Do u want to delete/edit "+id, Toast.LENGTH_SHORT).show();
+                deleteQuestion(id);
                 return true;
             }
         });
+        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateQuestion(id);
+            }
+        });
+    }
+
+    private void updateQuestion(String id) {
+    }
+
+    private void deleteQuestion(String id){
+
     }
 
     @Override

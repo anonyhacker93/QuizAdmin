@@ -1,6 +1,8 @@
-package com.sheoran.dinesh.quizadmin;
+package com.sheoran.dinesh.quizadmin.model;
 
-public class Questions {
+import com.sheoran.dinesh.quizadmin.firebase.IFirebasable;
+
+public class Questions implements IFirebasable{
 
     private String id;
     private String question;

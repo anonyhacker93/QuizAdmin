@@ -1,6 +1,8 @@
 package com.sheoran.dinesh.quizadmin.model;
 
-public class User {
+import com.sheoran.dinesh.quizadmin.firebase.IFirebasable;
+
+public class User implements IFirebasable{
     private String name;
     private String email;
     private String password;

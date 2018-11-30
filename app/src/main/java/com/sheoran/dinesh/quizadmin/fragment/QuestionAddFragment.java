@@ -19,14 +19,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.sheoran.dinesh.quizadmin.Questions;
 import com.sheoran.dinesh.quizadmin.R;
+import com.sheoran.dinesh.quizadmin.model.Questions;
+import com.sheoran.dinesh.quizadmin.util.Constants;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class QuestionAddFragment extends Fragment {
+public class QuestionAddFragment extends BaseFragment {
     private final static String BASE_CHILD_NAME = "Question";
     private Button submitQuestion;
     private EditText question;
@@ -35,11 +36,10 @@ public class QuestionAddFragment extends Fragment {
     private EditText option3;
     private EditText option4;
     private Spinner answerSpinner;
-    private DatabaseReference usersReference;
-    private int idNo = 200;
+    private int idNo;
 
     public QuestionAddFragment() {
-        // Required empty public constructor
+        idNo = Constants.INITIAL_ID;
     }
 
 
@@ -60,7 +60,7 @@ public class QuestionAddFragment extends Fragment {
         option3 = (EditText) view.findViewById(R.id.option3);
         option4 = (EditText) view.findViewById(R.id.option4);
         answerSpinner = (Spinner) view.findViewById(R.id.correctAnsrSpinner);
-        initFirebase();
+        initFirebase(getContext(),BASE_CHILD_NAME);
         initId();
         addOptionsToSpinner();
         submitQuestion.setOnClickListener(new View.OnClickListener() {
@@ -77,15 +77,6 @@ public class QuestionAddFragment extends Fragment {
         });
 
         return view;
-    }
-
-
-    private void initFirebase() {
-        FirebaseApp.initializeApp(getContext());
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        usersReference = firebaseDatabase.getReference("Question");
-
-
     }
 
     private void initId() {
@@ -105,15 +96,14 @@ public class QuestionAddFragment extends Fragment {
                 if (key != null) {
                     idNo = Integer.parseInt(key);
                     idNo++;
-                }
-                {
+                } else {
                     idNo = 0;
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Toast.makeText(getContext(), "Unable to access database !", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -203,13 +193,13 @@ public class QuestionAddFragment extends Fragment {
     }
 
     private void uploadOnFirebase(final Questions questions) {
-        usersReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        firebaseDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.child(questions.getId()).exists()) {
                     Toast.makeText(getContext(), "This question id is already existed!", Toast.LENGTH_SHORT).show();
                 } else {
-                    usersReference.child(questions.getId()).setValue(questions);
+                    firebaseDatabaseReference.child(questions.getId()).setValue(questions);
                     Toast.makeText(getContext(), "Question Added Successfully !!", Toast.LENGTH_SHORT).show();
 
                 }

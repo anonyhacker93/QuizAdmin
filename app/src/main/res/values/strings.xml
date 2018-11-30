@@ -19,8 +19,6 @@
     <string name="update_question">Update question</string>
 
 
-
-
     <string-array name="options_entries">
         <item>Correct answer</item>
         <item>1</item>
