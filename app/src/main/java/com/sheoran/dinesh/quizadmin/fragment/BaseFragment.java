@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,5 +40,12 @@ public class BaseFragment extends Fragment {
     protected void initFirebase(Context context, String databaseReference) {
         FirebaseHelper firebaseHelper = new FirebaseHelper(context,databaseReference);
         firebaseDatabaseReference = firebaseHelper.getDatabaseReference();
+    }
+
+    protected void replaceFragment(Fragment fragment,int container) {
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }

@@ -25,7 +25,7 @@ import java.util.ListIterator;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class QuestionDisplayFragment extends Fragment implements CustomRecyclerClickListener {
+public class QuestionDisplayFragment extends BaseFragment implements CustomRecyclerClickListener {
     public final static String QUESTIONS_KEY = "Questions Key";
     private RecyclerView recyclerView;
     private ArrayList<Questions> questionArrayList;
@@ -41,7 +41,6 @@ public class QuestionDisplayFragment extends Fragment implements CustomRecyclerC
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        questionArrayList = new ArrayList<>();
         _firebaseHelper = new FirebaseHelper(getContext(), FIREBASE_REF);
     }
 
@@ -52,6 +51,7 @@ public class QuestionDisplayFragment extends Fragment implements CustomRecyclerC
         View view = inflater.inflate(R.layout.fragment_question_display, container, false);
         recyclerView = view.findViewById(R.id.questionDisplayRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        questionArrayList = new ArrayList<>();
         loadQuestion();
         _adapter = new QuestionDisplayRecyclerAdapter(getContext(), this, questionArrayList);
         recyclerView.setAdapter(_adapter);
@@ -62,18 +62,38 @@ public class QuestionDisplayFragment extends Fragment implements CustomRecyclerC
         Questions questions = new Questions();
         questions.setId("300");
         questions.setQuestion("What is ur name");
+        questions.setOption1("A");
+        questions.setOption2("B");
+        questions.setOption3("C");
+        questions.setOption4("D");
+        questions.setRightAnswer("B");
 
         Questions questions1 = new Questions();
         questions1.setId("301");
         questions1.setQuestion("What is ur mom name");
+        questions1.setOption1("A");
+        questions1.setOption2("B");
+        questions1.setOption3("C");
+        questions1.setOption4("D");
+        questions1.setRightAnswer("B");
 
         Questions questions2 = new Questions();
         questions2.setId("302");
         questions2.setQuestion("What is ur father name What is ur mom name What is ur mom name What is ur mom name");
+        questions2.setOption1("A");
+        questions2.setOption2("B");
+        questions2.setOption3("C");
+        questions2.setOption4("D");
+        questions2.setRightAnswer("B");
 
         Questions questions3 = new Questions();
         questions3.setId("303");
         questions3.setQuestion("What is ur gf name");
+        questions3.setOption1("A");
+        questions3.setOption2("B");
+        questions3.setOption3("C");
+        questions3.setOption4("D");
+        questions3.setRightAnswer("B");
 
         questionArrayList.add(questions);
         questionArrayList.add(questions1);
@@ -101,10 +121,10 @@ public class QuestionDisplayFragment extends Fragment implements CustomRecyclerC
         Toast.makeText(getContext(), "Question clicked for update " + id, Toast.LENGTH_SHORT).show();
         QuestionUpdateFragment updateFragment = new QuestionUpdateFragment();
         Bundle bundle = new Bundle();
-        Questions question = new Questions();
+        Questions question = getQuestionFromList(id);
         bundle.putSerializable(QUESTIONS_KEY, question);
         updateFragment.setArguments(bundle);
-
+        replaceFragment(updateFragment,R.id.home_fragment_container);
     }
 
     /**
@@ -146,5 +166,16 @@ public class QuestionDisplayFragment extends Fragment implements CustomRecyclerC
             }
         });
         deleteQuestion.show();
+    }
+
+    private Questions getQuestionFromList(final String id){
+        ListIterator<Questions> itr = questionArrayList.listIterator();
+        while (itr.hasNext()) {
+            Questions questions = itr.next();
+            if (id.equals(questions.getId())) {
+             return questions;
+            }
+        }
+        return null;
     }
 }

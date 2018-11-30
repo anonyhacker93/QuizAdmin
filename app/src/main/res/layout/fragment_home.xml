@@ -15,11 +15,6 @@
             android:text="@string/add_question"
             />
         <Button
-            android:id="@+id/btn_home_update_question"
-            style="@style/width_match_parent"
-            android:text="@string/update_question"
-            />
-        <Button
             android:id="@+id/btn_home_delete_question"
             style="@style/width_match_parent"
             android:text="@string/delete_question"
