@@ -104,6 +104,7 @@ public class QuestionDisplayFragment extends Fragment implements CustomRecyclerC
         Questions question = new Questions();
         bundle.putSerializable(QUESTIONS_KEY, question);
         updateFragment.setArguments(bundle);
+
     }
 
     /**
