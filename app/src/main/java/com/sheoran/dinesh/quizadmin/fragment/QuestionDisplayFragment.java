@@ -1,25 +1,33 @@
 package com.sheoran.dinesh.quizadmin.fragment;
 
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.sheoran.dinesh.quizadmin.R;
 import com.sheoran.dinesh.quizadmin.adapter.QuestionDisplayRecyclerAdapter;
 import com.sheoran.dinesh.quizadmin.firebase.FirebaseHelper;
 import com.sheoran.dinesh.quizadmin.listener.CustomRecyclerClickListener;
 import com.sheoran.dinesh.quizadmin.model.Questions;
+import com.sheoran.dinesh.quizadmin.util.Constants;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.ListIterator;
 
 /**
@@ -30,7 +38,6 @@ public class QuestionDisplayFragment extends BaseFragment implements CustomRecyc
     private RecyclerView recyclerView;
     private ArrayList<Questions> questionArrayList;
     private FirebaseHelper _firebaseHelper;
-    public final static String FIREBASE_REF = "Question";
 
     public QuestionDisplayFragment() {
         // Required empty public constructor
@@ -41,7 +48,7 @@ public class QuestionDisplayFragment extends BaseFragment implements CustomRecyc
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        _firebaseHelper = new FirebaseHelper(getContext(), FIREBASE_REF);
+        _firebaseHelper = new FirebaseHelper(getContext(), Constants.FIREBASE_QUESTION_REF);
     }
 
     @Override
@@ -52,6 +59,7 @@ public class QuestionDisplayFragment extends BaseFragment implements CustomRecyc
         recyclerView = view.findViewById(R.id.questionDisplayRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         questionArrayList = new ArrayList<>();
+        initFirebase(getContext(), Constants.FIREBASE_QUESTION_REF);
         loadQuestion();
         _adapter = new QuestionDisplayRecyclerAdapter(getContext(), this, questionArrayList);
         recyclerView.setAdapter(_adapter);
@@ -59,46 +67,37 @@ public class QuestionDisplayFragment extends BaseFragment implements CustomRecyc
     }
 
     private void loadQuestion() {
-        Questions questions = new Questions();
-        questions.setId("300");
-        questions.setQuestion("What is ur name");
-        questions.setOption1("A");
-        questions.setOption2("B");
-        questions.setOption3("C");
-        questions.setOption4("D");
-        questions.setRightAnswer("B");
 
-        Questions questions1 = new Questions();
-        questions1.setId("301");
-        questions1.setQuestion("What is ur mom name");
-        questions1.setOption1("A");
-        questions1.setOption2("B");
-        questions1.setOption3("C");
-        questions1.setOption4("D");
-        questions1.setRightAnswer("B");
+        final ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setTitle("Please wait");
+        progressDialog.setMessage("Loading Data");
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        firebaseDatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+                Questions questions;
+                questionArrayList.clear();
+                while (iterator.hasNext()) {
+                    DataSnapshot dataShot = iterator.next();
+                    questions = dataShot.getValue(Questions.class);
+                    questionArrayList.add(questions);
+                }
+                _adapter.notifyDataSetChanged();
+                progressDialog.dismiss();
+            }
 
-        Questions questions2 = new Questions();
-        questions2.setId("302");
-        questions2.setQuestion("What is ur father name What is ur mom name What is ur mom name What is ur mom name");
-        questions2.setOption1("A");
-        questions2.setOption2("B");
-        questions2.setOption3("C");
-        questions2.setOption4("D");
-        questions2.setRightAnswer("B");
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.i("QuizAdminTag : ","Exception : "+databaseError.getMessage());
+                Toast.makeText(getContext(), "Exception : "+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+            }
+        });
 
-        Questions questions3 = new Questions();
-        questions3.setId("303");
-        questions3.setQuestion("What is ur gf name");
-        questions3.setOption1("A");
-        questions3.setOption2("B");
-        questions3.setOption3("C");
-        questions3.setOption4("D");
-        questions3.setRightAnswer("B");
 
-        questionArrayList.add(questions);
-        questionArrayList.add(questions1);
-        questionArrayList.add(questions2);
-        questionArrayList.add(questions3);
     }
 
     //Recycler Click Listener
@@ -124,7 +123,7 @@ public class QuestionDisplayFragment extends BaseFragment implements CustomRecyc
         Questions question = getQuestionFromList(id);
         bundle.putSerializable(QUESTIONS_KEY, question);
         updateFragment.setArguments(bundle);
-        replaceFragment(updateFragment,R.id.home_fragment_container);
+        replaceFragment(updateFragment, R.id.home_fragment_container);
     }
 
     /**
@@ -133,7 +132,6 @@ public class QuestionDisplayFragment extends BaseFragment implements CustomRecyc
      * @param id indicating question id
      */
     private void deleteQuestion(String id) {
-
         boolean isDeleted = _firebaseHelper.deleteNode(getContext(), id); //Delete item from firebase
         if (isDeleted) {
             Toast.makeText(getContext(), "Question clicked for delete " + id, Toast.LENGTH_SHORT).show();
@@ -144,7 +142,7 @@ public class QuestionDisplayFragment extends BaseFragment implements CustomRecyc
                     itr.remove();
                 }
             }
-            _adapter.notifyDataSetChanged();
+           // _adapter.notifyDataSetChanged();
         }
 
     }
@@ -168,14 +166,16 @@ public class QuestionDisplayFragment extends BaseFragment implements CustomRecyc
         deleteQuestion.show();
     }
 
-    private Questions getQuestionFromList(final String id){
+    private Questions getQuestionFromList(final String id) {
         ListIterator<Questions> itr = questionArrayList.listIterator();
         while (itr.hasNext()) {
             Questions questions = itr.next();
             if (id.equals(questions.getId())) {
-             return questions;
+                return questions;
             }
         }
         return null;
     }
+
+
 }

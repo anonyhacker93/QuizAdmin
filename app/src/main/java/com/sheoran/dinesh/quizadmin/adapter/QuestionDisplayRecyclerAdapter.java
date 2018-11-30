@@ -36,6 +36,8 @@ public class QuestionDisplayRecyclerAdapter extends RecyclerView.Adapter<Questio
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int i) {
         Questions questions = questionsArrayList.get(i);
+        if(questions == null) return;
+
         final String id = questions.getId();
         String ques = questions.getQuestion();
         holder.txtId.setText(id);
