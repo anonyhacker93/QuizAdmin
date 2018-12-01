@@ -25,7 +25,8 @@ public class HomeFragment extends BaseFragment {
         Button btnAddQuestion = view.findViewById(R.id.btn_home_add_question);
 
         Button btnDisplayQuestion = view.findViewById(R.id.btn_home_display_question);
-
+        Button btnAddCategory = view.findViewById(R.id.btn_home_add_category);
+        Button btnShowCategory = view.findViewById(R.id.btn_home_show_category);
         btnAddQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -33,10 +34,23 @@ public class HomeFragment extends BaseFragment {
             }
         });
 
+        btnAddCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                replaceFragment(new CategoryAddFragment(),R.id.home_fragment_container);
+            }
+        });
         btnDisplayQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 replaceFragment(new QuestionDisplayFragment(),R.id.home_fragment_container);
+            }
+        });
+
+        btnShowCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                replaceFragment(new CategoryDisplayFragment(),R.id.home_fragment_container);
             }
         });
         return view;

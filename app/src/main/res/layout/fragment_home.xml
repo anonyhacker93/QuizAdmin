@@ -20,5 +20,15 @@
             style="@style/width_match_parent"
             android:text="@string/display_question" />
 
+        <Button
+            android:id="@+id/btn_home_add_category"
+            style="@style/width_match_parent"
+            android:text="@string/add_category" />
+
+        <Button
+            android:id="@+id/btn_home_show_category"
+            style="@style/width_match_parent"
+            android:text="@string/show_category" />
+
     </LinearLayout>
 </LinearLayout>
