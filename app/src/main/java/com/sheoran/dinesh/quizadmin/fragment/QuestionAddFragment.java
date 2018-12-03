@@ -34,6 +34,7 @@ public class QuestionAddFragment extends BaseFragment {
     private EditText option3;
     private EditText option4;
     private Spinner answerSpinner;
+    private Spinner categorySpinner;
     private int idNo;
 
     public QuestionAddFragment() {
@@ -51,20 +52,20 @@ public class QuestionAddFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_question_add, container, false);
-        submitQuestion = (Button) view.findViewById(R.id.addQuestionBtn);
-        question = (EditText) view.findViewById(R.id.edit_text_question);
-        option1 = (EditText) view.findViewById(R.id.option1);
-        option2 = (EditText) view.findViewById(R.id.option2);
-        option3 = (EditText) view.findViewById(R.id.option3);
-        option4 = (EditText) view.findViewById(R.id.option4);
-        answerSpinner = (Spinner) view.findViewById(R.id.correctAnsrSpinner);
+        submitQuestion = view.findViewById(R.id.addQuestionBtn);
+        question = view.findViewById(R.id.edit_text_question);
+        option1 = view.findViewById(R.id.option1);
+        option2 = view.findViewById(R.id.option2);
+        option3 = view.findViewById(R.id.option3);
+        option4 = view.findViewById(R.id.option4);
+        answerSpinner = view.findViewById(R.id.correctAnsrSpinner);
+        categorySpinner = view.findViewById(R.id.spinnerQuestionCateg);
         initFirebase(getContext(), Constants.FIREBASE_QUESTION_REF);
         initId();
         addOptionsToSpinner();
         submitQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkValidFields();
                 if (checkValidFields()) {
                     saveQuestion();
                     resetAllFields();
@@ -117,6 +118,9 @@ public class QuestionAddFragment extends BaseFragment {
         } else if (answerSpinner.getSelectedItemPosition() == 0) {
             isValid = false;
             errorMsg =  R.string.markCorrectAnswer;
+        } else  if (categorySpinner.getSelectedItemPosition() == 0){
+            isValid = false;
+            errorMsg =  R.string.enterCategory;
         }
         if(errorMsg != -999){
             Toast.makeText(getContext(), errorMsg, Toast.LENGTH_SHORT).show();
@@ -151,7 +155,7 @@ public class QuestionAddFragment extends BaseFragment {
 
     private void addOptionsToSpinner() {
         List<String> list = new ArrayList<String>();
-        list.add("----Correct answer----");
+        list.add("Answer");
         list.add("Option 1");
         list.add("Option 2");
         list.add("Option 3");

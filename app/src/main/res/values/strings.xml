@@ -6,12 +6,13 @@
 
     <string name="add_category">Add Category</string>
     <string name="add_question">Add question</string>
-    <string name="correctAnswer">----Correct answer----</string>
+    <string name="correctAnswer">Answer</string>
     <string name="delete_question">Delete question</string>
     <string name="display_question">Display Question</string>
     <string name="enterQuestion">Please enter your question</string>
     <string name="enterAllOptions">Please enter all the options</string>
     <string name="markCorrectAnswer">Choose correct answer</string>
+    <string name="enterCategory">Enter Category of the question</string>
     <string name="option1">Option 1</string>
     <string name="option2">Option 2</string>
     <string name="option3">Option 3</string>
