@@ -114,7 +114,7 @@ public class QuestionAddFragment extends BaseFragment {
         } else if (option1.length() == 0 || option2.length() == 0 || option3.length() == 0 || option4.length() == 0) {
             isValid = false;
             errorMsg = R.string.enterAllOptions;
-        } else if (answerSpinner.getSelectedItem().equals("----Correct answer----")) {
+        } else if (answerSpinner.getSelectedItemPosition() == 0) {
             isValid = false;
             errorMsg =  R.string.markCorrectAnswer;
         }

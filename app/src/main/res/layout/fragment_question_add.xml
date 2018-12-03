@@ -61,18 +61,36 @@
                 android:singleLine="true"
                 android:layout_marginTop="10dp"
                 android:hint="@string/option4" />
+          <RelativeLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal"
 
-            <Spinner
-                android:id="@+id/correctAnsrSpinner"
-                android:layout_width="wrap_content"
-                android:layout_height="37dp"
-                android:layout_gravity="center"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:autofillHints="Right Option"
-                android:entries="@array/options_entries"
+              >
 
-                ></Spinner>
+              <Spinner
+                  android:id="@+id/correctAnsrSpinner"
+                  android:layout_width="wrap_content"
+                  android:layout_height="40dp"
+                  android:layout_marginTop="10dp"
+                  android:layout_marginBottom="10dp"
+                  android:autofillHints="Category"
+                  android:entries="@array/options_entries"
+                    android:layout_alignParentLeft="true"
+                  ></Spinner>
+
+              <Spinner
+                  android:id="@+id/spinnerQuestionCateg"
+                  android:layout_width="wrap_content"
+                  android:layout_height="40dp"
+                  android:layout_marginTop="10dp"
+                  android:layout_marginBottom="10dp"
+                  android:autofillHints="Answer"
+                  android:entries="@array/options_Categories"
+                  android:layout_alignParentRight="true"
+                  ></Spinner>
+          </RelativeLayout>
+
         </LinearLayout>
 
         <Button
