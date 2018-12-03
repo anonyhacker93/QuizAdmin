@@ -148,7 +148,7 @@ public class QuestionDisplayFragment extends BaseFragment implements QuestionRec
 
     private void showDeleteConfirmationDialog(final Questions questions) {
         AlertDialog.Builder deleteQuestion = new AlertDialog.Builder(getContext());
-        deleteQuestion.setMessage("Do you want to delete this question?");
+        deleteQuestion.setMessage(getResources().getString(R.string.deleteSelectedQuestion));
         deleteQuestion.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

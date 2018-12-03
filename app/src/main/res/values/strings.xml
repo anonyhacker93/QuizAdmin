@@ -20,6 +20,8 @@
     <string name="show_category">Show Category</string>
     <string name="typeQuestionsHere">Type your questions here</string>
     <string name="update_question">Update question</string>
+    <string name="deleteSelectedQuestion">"Do you want to delete this Question?"</string>
+    <string name="deleteSelectedCategory">"Do you want to delete"</string>
 
 
     <string-array name="options_entries">

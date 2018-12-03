@@ -62,16 +62,17 @@
                 android:imeOptions="actionDone"
                 android:singleLine="true" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-
+                android:weightSum="2"
                 >
 
                 <Spinner
                     android:id="@+id/correctAnsrSpinner"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="40dp"
                     android:layout_alignParentLeft="true"
                     android:layout_marginBottom="10dp"
@@ -81,14 +82,15 @@
 
                 <Spinner
                     android:id="@+id/spinnerQuestionCateg"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="40dp"
                     android:layout_alignParentRight="true"
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="10dp"
                     android:autofillHints="Answer"
                     android:entries="@array/options_Categories"></Spinner>
-            </RelativeLayout>
+            </LinearLayout>
 
         </LinearLayout>
 
