@@ -16,10 +16,10 @@
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="10dp"
             android:gravity="top"
-            android:hint="@string/typeQuestionsHere"
+            android:hint="@string/typeQuestionHere"
             android:imeOptions="actionNext"
-            android:singleLine="false"
-            android:inputType="text|textImeMultiLine" />
+            android:inputType="text|textImeMultiLine"
+            android:singleLine="false" />
 
         <LinearLayout
             style="@style/both_match_parent"
@@ -67,30 +67,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:weightSum="2"
-                >
+                android:weightSum="2">
 
                 <Spinner
                     android:id="@+id/correctAnsrSpinner"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="40dp"
                     android:layout_alignParentLeft="true"
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="10dp"
+                    android:layout_weight="1"
                     android:autofillHints="Category"
-                    android:entries="@array/options_entries"></Spinner>
+                    android:entries="@array/options_entries">
+                </Spinner>
 
                 <Spinner
                     android:id="@+id/spinnerQuestionCateg"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="40dp"
                     android:layout_alignParentRight="true"
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="10dp"
+                    android:layout_weight="1"
                     android:autofillHints="Answer"
-                    android:entries="@array/options_Categories"></Spinner>
+                    android:entries="@array/options_Categories">
+                </Spinner>
             </LinearLayout>
 
         </LinearLayout>

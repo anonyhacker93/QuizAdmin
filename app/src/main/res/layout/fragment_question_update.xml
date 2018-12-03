@@ -16,7 +16,7 @@
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="10dp"
             android:gravity="top"
-            android:hint="@string/typeQuestionsHere"
+            android:hint="@string/typeQuestionHere"
             android:inputType="text|textMultiLine" />
 
         <LinearLayout
