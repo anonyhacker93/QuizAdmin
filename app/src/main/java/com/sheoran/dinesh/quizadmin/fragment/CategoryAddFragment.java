@@ -50,6 +50,7 @@ public class CategoryAddFragment extends BaseFragment {
         final String categName = _edTxtAddCategory.getText().toString();
         if (inputValidation(categName)) {
             uploadOnFirebase(categName);
+            _edTxtAddCategory.setText("");
         }
     }
 
