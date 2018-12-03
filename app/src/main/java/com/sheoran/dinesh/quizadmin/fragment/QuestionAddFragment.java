@@ -1,7 +1,9 @@
 package com.sheoran.dinesh.quizadmin.fragment;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +16,9 @@ import android.widget.Toast;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.sheoran.dinesh.quizadmin.R;
+import com.sheoran.dinesh.quizadmin.model.Category;
 import com.sheoran.dinesh.quizadmin.model.Questions;
 import com.sheoran.dinesh.quizadmin.util.Constants;
 
@@ -60,15 +61,13 @@ public class QuestionAddFragment extends BaseFragment {
         option4 = view.findViewById(R.id.option4);
         answerSpinner = view.findViewById(R.id.correctAnsrSpinner);
         categorySpinner = view.findViewById(R.id.spinnerQuestionCateg);
-        initFirebase(getContext(), Constants.FIREBASE_QUESTION_REF);
-        initId();
-        addOptionsToSpinner();
+        init();
+
         submitQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (checkValidFields()) {
                     saveQuestion();
-                    resetAllFields();
                 }
 
             }
@@ -77,33 +76,38 @@ public class QuestionAddFragment extends BaseFragment {
         return view;
     }
 
-    private void initId() {
+    private void init() {
 
-        DatabaseReference dbref = FirebaseDatabase.getInstance().getReference();
-        Query lastchield =
-                dbref.child(Constants.FIREBASE_QUESTION_REF).orderByKey().limitToLast(1);
-        lastchield.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot ds) {
-                Iterator<DataSnapshot> itr = ds.getChildren().iterator();
-                String key = null;
-                while (itr.hasNext()) {
-                    DataSnapshot shot = itr.next();
-                    key = shot.getKey();
-                }
-                if (key != null) {
-                    idNo = Integer.parseInt(key);
-                    idNo++;
-                } else {
-                    idNo = 0;
-                }
-            }
+        addCategoryToSpinner();
+        incrementId();
+        addOptionsToSpinner();
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getContext(), "Unable to access database !", Toast.LENGTH_SHORT).show();
-            }
-        });
+    }
+
+    private void addCategoryToSpinner() {
+        loadCategories();
+    }
+
+    private void incrementId() {
+      final DatabaseReference reference = initFirebase(getContext(), Constants.FIREBASE_ID_NO_REF);
+          reference.addListenerForSingleValueEvent(new ValueEventListener() {
+              @Override
+              public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                  Object id = dataSnapshot.getValue();
+                  if(id != null){
+                      idNo =Integer.parseInt(id.toString());
+                  }else {
+                      idNo = 1;
+                  }
+                  idNo++;
+                  reference.setValue(idNo);
+              }
+
+              @Override
+              public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.i(Constants.LOG_TAG,"QuestionAddFragment : incrementId() "+databaseError.getMessage());
+              }
+          });
     }
 
     private boolean checkValidFields() {
@@ -117,19 +121,18 @@ public class QuestionAddFragment extends BaseFragment {
             errorMsg = R.string.enterAllOptions;
         } else if (answerSpinner.getSelectedItemPosition() == 0) {
             isValid = false;
-            errorMsg =  R.string.markCorrectAnswer;
-        } else  if (categorySpinner.getSelectedItemPosition() == 0){
+            errorMsg = R.string.markCorrectAnswer;
+        } else if (categorySpinner.getSelectedItemPosition() == 0) {
             isValid = false;
-            errorMsg =  R.string.enterCategory;
+            errorMsg = R.string.enterCategory;
         }
-        if(errorMsg != -999){
+        if (errorMsg != -999) {
             Toast.makeText(getContext(), errorMsg, Toast.LENGTH_SHORT).show();
         }
         return isValid;
     }
 
     private void saveQuestion() {
-        idNo++;
         String id = Integer.toString(idNo);
         String ques = question.getText().toString();
         String opt1 = option1.getText().toString();
@@ -137,6 +140,7 @@ public class QuestionAddFragment extends BaseFragment {
         String opt3 = option3.getText().toString();
         String opt4 = option4.getText().toString();
         int indx = answerSpinner.getSelectedItemPosition();
+        String categoryName = (String) categorySpinner.getSelectedItem();
         String ans = null;
 
         if (indx == 1) {
@@ -149,8 +153,8 @@ public class QuestionAddFragment extends BaseFragment {
             ans = opt4;
         }
 
-        Questions questions = new Questions(id, ques, opt1, opt2, opt3, opt4, ans);
-        uploadOnFirebase(questions);
+        Questions questions = new Questions(id, ques, opt1, opt2, opt3, opt4, ans, categoryName);
+        uploadQuestionsOnFirebase(questions);
     }
 
     private void addOptionsToSpinner() {
@@ -175,17 +179,20 @@ public class QuestionAddFragment extends BaseFragment {
         answerSpinner.setSelection(0);
     }
 
-    private void uploadOnFirebase(final Questions questions) {
-        firebaseDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+    private void uploadQuestionsOnFirebase(final Questions questions) {
+        final DatabaseReference reference = initFirebase(getContext(), Constants.FIREBASE_QUESTION_REF);
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.child(questions.getId()).exists()) {
-                    Toast.makeText(getContext(), "This question id is already existed!", Toast.LENGTH_SHORT).show();
-                } else {
-                    firebaseDatabaseReference.child(questions.getId()).setValue(questions);
-                    Toast.makeText(getContext(), "Question Added Successfully !!", Toast.LENGTH_SHORT).show();
 
-                }
+                DatabaseReference categRefer = reference.child(questions.getCategoryName());
+
+                    categRefer.child(questions.getId()).setValue(questions);
+                    incrementId();
+                    resetAllFields();
+
+                //  Toast.makeText(getContext(), "Category does not exist", Toast.LENGTH_SHORT).show();
+
             }
 
             @Override
@@ -195,5 +202,54 @@ public class QuestionAddFragment extends BaseFragment {
         });
     }
 
+    private ArrayList<Category> loadCategories() {
+        final ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setTitle("Loading categories");
+        progressDialog.setMessage("Please wait...");
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        final ArrayList<Category> categoryArrayList = new ArrayList<>();
+        DatabaseReference reference = initFirebase(getContext(), Constants.FIREBASE_CATEGORY_REF);
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot ds) {
+                Iterator<DataSnapshot> itr = ds.getChildren().iterator();
+                while (itr.hasNext()) {
+                    DataSnapshot shot = itr.next();
+                    Category category = shot.getValue(Category.class);
+                    if (category != null) {
+                        categoryArrayList.add(category);
+                    }
+                }
+
+                String[] dataList;
+                dataList = new String[categoryArrayList.size() + 1];
+                dataList[0] = "Categories";
+                if (categoryArrayList != null) {
+                    int indx = 1;
+                    for (Category categ : categoryArrayList) {
+                        dataList[indx] = categ.getCategoryName();
+                        indx++;
+                    }
+                }
+
+                ArrayAdapter<String> categoryDropdownAdapter;
+                categoryDropdownAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, dataList);
+                categoryDropdownAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                categorySpinner.setAdapter(categoryDropdownAdapter);
+                progressDialog.dismiss();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                progressDialog.dismiss();
+                Toast.makeText(getContext(), "Unable to access database !", Toast.LENGTH_SHORT).show();
+            }
+        });
+        return categoryArrayList;
+    }
 
 }

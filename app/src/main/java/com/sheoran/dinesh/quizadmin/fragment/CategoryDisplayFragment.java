@@ -15,10 +15,11 @@ import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.sheoran.dinesh.quizadmin.R;
 import com.sheoran.dinesh.quizadmin.adapter.CategoryDisplayRecyclerAdapter;
-import com.sheoran.dinesh.quizadmin.listener.CustomRecyclerClickListener;
+import com.sheoran.dinesh.quizadmin.listener.CategoryRecyclerClickListener;
 import com.sheoran.dinesh.quizadmin.model.Category;
 import com.sheoran.dinesh.quizadmin.util.Constants;
 
@@ -28,8 +29,8 @@ import java.util.Iterator;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CategoryDisplayFragment extends BaseFragment implements CustomRecyclerClickListener {
-
+public class CategoryDisplayFragment extends BaseFragment implements CategoryRecyclerClickListener {
+    public static final String CATEGORY_KEY = "com.sheoran.dinesh.quizadmin.fragment.CategoryDisplayFragment";
     private RecyclerView _recyclerView;
     private CategoryDisplayRecyclerAdapter _recyclerAdapter;
     private ArrayList<Category> _arrayList;
@@ -44,7 +45,7 @@ public class CategoryDisplayFragment extends BaseFragment implements CustomRecyc
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_category_display, container, false);
         _recyclerView = view.findViewById(R.id.categoryDisplayRecycler);
-         init();
+        init();
         _recyclerAdapter = new CategoryDisplayRecyclerAdapter(getContext(), this, _arrayList);
         _recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         _recyclerView.setAdapter(_recyclerAdapter);
@@ -54,6 +55,12 @@ public class CategoryDisplayFragment extends BaseFragment implements CustomRecyc
     @Override
     public void onSingleClickListener(String str) {
         Toast.makeText(getContext(), "Edit Categ", Toast.LENGTH_SHORT).show();
+
+        Bundle bundle =new Bundle();
+        bundle.putSerializable(CATEGORY_KEY,new Category(str));
+        QuestionDisplayFragment questionDisplayFragment = new QuestionDisplayFragment();
+        questionDisplayFragment.setArguments(bundle);
+        replaceFragment(questionDisplayFragment,R.id.home_fragment_container);
     }
 
     @Override
@@ -63,7 +70,6 @@ public class CategoryDisplayFragment extends BaseFragment implements CustomRecyc
 
     private void init() {
         _arrayList = new ArrayList<>();
-        initFirebase(getContext(), Constants.FIREBASE_CATEGORY_REF);
         loadCategory();
     }
 
@@ -74,7 +80,8 @@ public class CategoryDisplayFragment extends BaseFragment implements CustomRecyc
         progressDialog.setIndeterminate(true);
         progressDialog.setCancelable(false);
         progressDialog.show();
-        firebaseDatabaseReference.addValueEventListener(new ValueEventListener() {
+        final DatabaseReference reference = initFirebase(getContext(), Constants.FIREBASE_CATEGORY_REF);
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();

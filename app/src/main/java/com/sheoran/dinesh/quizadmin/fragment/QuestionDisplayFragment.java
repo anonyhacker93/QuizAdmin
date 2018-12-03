@@ -18,11 +18,13 @@ import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.sheoran.dinesh.quizadmin.R;
 import com.sheoran.dinesh.quizadmin.adapter.QuestionDisplayRecyclerAdapter;
 import com.sheoran.dinesh.quizadmin.firebase.FirebaseHelper;
-import com.sheoran.dinesh.quizadmin.listener.CustomRecyclerClickListener;
+import com.sheoran.dinesh.quizadmin.listener.QuestionRecyclerClickListener;
+import com.sheoran.dinesh.quizadmin.model.Category;
 import com.sheoran.dinesh.quizadmin.model.Questions;
 import com.sheoran.dinesh.quizadmin.util.Constants;
 
@@ -33,7 +35,7 @@ import java.util.ListIterator;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class QuestionDisplayFragment extends BaseFragment implements CustomRecyclerClickListener {
+public class QuestionDisplayFragment extends BaseFragment implements QuestionRecyclerClickListener {
     public final static String QUESTIONS_KEY = "Questions Key";
     private RecyclerView recyclerView;
     private ArrayList<Questions> questionArrayList;
@@ -60,24 +62,32 @@ public class QuestionDisplayFragment extends BaseFragment implements CustomRecyc
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         questionArrayList = new ArrayList<>();
         initFirebase(getContext(), Constants.FIREBASE_QUESTION_REF);
-        loadQuestion();
-        _adapter = new QuestionDisplayRecyclerAdapter(getContext(), this, questionArrayList);
-        recyclerView.setAdapter(_adapter);
+
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            Category category = (Category) bundle.getSerializable(CategoryDisplayFragment.CATEGORY_KEY);
+            loadQuestion(category.getCategoryName());
+            _adapter = new QuestionDisplayRecyclerAdapter(getContext(), this, questionArrayList);
+            recyclerView.setAdapter(_adapter);
+        }
+
+
         return view;
     }
 
-    private void loadQuestion() {
-
+    private void loadQuestion(final String categName) {
+        final DatabaseReference reference = initFirebase(getContext(), Constants.FIREBASE_QUESTION_REF);
         final ProgressDialog progressDialog = new ProgressDialog(getContext());
         progressDialog.setTitle("Please wait");
         progressDialog.setMessage("Loading Data");
         progressDialog.setIndeterminate(true);
         progressDialog.setCancelable(false);
         progressDialog.show();
-        firebaseDatabaseReference.addValueEventListener(new ValueEventListener() {
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+
+                Iterator<DataSnapshot> iterator = dataSnapshot.child(categName).getChildren().iterator();
                 Questions questions;
                 questionArrayList.clear();
                 while (iterator.hasNext()) {
@@ -91,8 +101,8 @@ public class QuestionDisplayFragment extends BaseFragment implements CustomRecyc
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.i("QuizAdminTag : ","Exception : "+databaseError.getMessage());
-                Toast.makeText(getContext(), "Exception : "+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.i("QuizAdminTag : ", "Exception : " + databaseError.getMessage());
+                Toast.makeText(getContext(), "Exception : " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
             }
         });
@@ -102,39 +112,29 @@ public class QuestionDisplayFragment extends BaseFragment implements CustomRecyc
 
     //Recycler Click Listener
     @Override
-    public void onSingleClickListener(String id) {
-        updateQuestion(id);
+    public void onSingleClickListener(Questions questions) {
+        updateQuestion(questions);
     }
 
     @Override
-    public void onLongClickListener(String id) {
+    public void onLongClickListener(Questions id) {
         showDeleteConfirmationDialog(id);
     }
 
-    /**
-     * It will open QuestionUpdateFragment to update the question content
-     *
-     * @param id indicating question id
-     */
-    private void updateQuestion(String id) {
-        Toast.makeText(getContext(), "Question clicked for update " + id, Toast.LENGTH_SHORT).show();
+    private void updateQuestion(Questions questions) {
+        Toast.makeText(getContext(), "Question clicked for update " + questions.getId(), Toast.LENGTH_SHORT).show();
         QuestionUpdateFragment updateFragment = new QuestionUpdateFragment();
         Bundle bundle = new Bundle();
-        Questions question = getQuestionFromList(id);
+        Questions question = getQuestionFromList(questions.getId());
         bundle.putSerializable(QUESTIONS_KEY, question);
         updateFragment.setArguments(bundle);
         replaceFragment(updateFragment, R.id.home_fragment_container);
     }
 
-    /**
-     * It will delete the question from Firebase and Questionlist
-     *
-     * @param id indicating question id
-     */
-    private void deleteQuestion(String id) {
-        boolean isDeleted = _firebaseHelper.deleteNode(getContext(), id); //Delete item from firebase
+    private void deleteQuestion(final Questions deleteQuestion) {
+        boolean isDeleted = _firebaseHelper.deleteNode(getContext(),deleteQuestion.getCategoryName(),deleteQuestion.getId()); //Delete item from firebase
         if (isDeleted) {
-            Toast.makeText(getContext(), "Question clicked for delete " + id, Toast.LENGTH_SHORT).show();
+            String id = deleteQuestion.getId();
             ListIterator<Questions> itr = questionArrayList.listIterator();
             while (itr.hasNext()) {
                 Questions questions = itr.next();
@@ -142,18 +142,17 @@ public class QuestionDisplayFragment extends BaseFragment implements CustomRecyc
                     itr.remove();
                 }
             }
-           // _adapter.notifyDataSetChanged();
         }
 
     }
 
-    private void showDeleteConfirmationDialog(final String id) {
+    private void showDeleteConfirmationDialog(final Questions questions) {
         AlertDialog.Builder deleteQuestion = new AlertDialog.Builder(getContext());
         deleteQuestion.setMessage("Do you want to delete this question?");
         deleteQuestion.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                deleteQuestion(id);
+                deleteQuestion(questions);
 
             }
         });

@@ -48,4 +48,21 @@ public class FirebaseHelper {
         }
         return false;
     }
+
+    public boolean deleteNode(Context context,String parentName,String childName){
+        try {
+            if (_databaseReference.child(parentName) != null) {
+                _databaseReference.child(parentName).child(childName).removeValue();
+                return true;
+            }
+            {
+                Toast.makeText(context, "This value does not exist in database", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        } catch (Exception ex) {
+            Toast.makeText(context, "This value does not exist in database", Toast.LENGTH_SHORT).show();
+        }
+        return false;
+
+    }
 }

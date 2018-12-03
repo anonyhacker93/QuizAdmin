@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.sheoran.dinesh.quizadmin.R;
-import com.sheoran.dinesh.quizadmin.listener.CustomRecyclerClickListener;
+import com.sheoran.dinesh.quizadmin.listener.CategoryRecyclerClickListener;
 import com.sheoran.dinesh.quizadmin.model.Category;
 
 import java.util.ArrayList;
@@ -19,9 +19,9 @@ import java.util.ArrayList;
 public class CategoryDisplayRecyclerAdapter extends RecyclerView.Adapter<CategoryDisplayRecyclerAdapter.MyViewHolder> {
     private ArrayList<Category> categoryArrayList;
     private Context _context;
-    private CustomRecyclerClickListener _clickListener;
+    private CategoryRecyclerClickListener _clickListener;
 
-    public CategoryDisplayRecyclerAdapter(Context context, CustomRecyclerClickListener clickListener, ArrayList<Category> categories) {
+    public CategoryDisplayRecyclerAdapter(Context context, CategoryRecyclerClickListener clickListener, ArrayList<Category> categories) {
         this._context = context;
         this._clickListener = clickListener;
         this.categoryArrayList = categories;

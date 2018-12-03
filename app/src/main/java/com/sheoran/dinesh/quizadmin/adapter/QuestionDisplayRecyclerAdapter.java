@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.sheoran.dinesh.quizadmin.R;
-import com.sheoran.dinesh.quizadmin.listener.CustomRecyclerClickListener;
+import com.sheoran.dinesh.quizadmin.listener.QuestionRecyclerClickListener;
 import com.sheoran.dinesh.quizadmin.model.Questions;
 
 import java.util.ArrayList;
@@ -18,9 +18,9 @@ import java.util.ArrayList;
 public class QuestionDisplayRecyclerAdapter extends RecyclerView.Adapter<QuestionDisplayRecyclerAdapter.MyViewHolder> {
     private ArrayList<Questions> questionsArrayList;
     private Context _context;
-    private CustomRecyclerClickListener _clickListener;
+    private QuestionRecyclerClickListener _clickListener;
 
-    public QuestionDisplayRecyclerAdapter(Context context, CustomRecyclerClickListener clickListener, ArrayList<Questions> questions) {
+    public QuestionDisplayRecyclerAdapter(Context context, QuestionRecyclerClickListener clickListener, ArrayList<Questions> questions) {
         this._context = context;
         this._clickListener = clickListener;
         this.questionsArrayList = questions;
@@ -35,7 +35,7 @@ public class QuestionDisplayRecyclerAdapter extends RecyclerView.Adapter<Questio
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int i) {
-        Questions questions = questionsArrayList.get(i);
+        final Questions questions = questionsArrayList.get(i);
         if(questions == null) return;
 
         final String id = questions.getId();
@@ -45,14 +45,14 @@ public class QuestionDisplayRecyclerAdapter extends RecyclerView.Adapter<Questio
         holder.linearLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                _clickListener.onLongClickListener(id);
+                _clickListener.onLongClickListener(questions);
                 return true;
             }
         });
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                _clickListener.onSingleClickListener(id);
+                _clickListener.onSingleClickListener(questions);
             }
         });
     }

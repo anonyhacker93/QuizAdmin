@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.sheoran.dinesh.quizadmin.R;
 import com.sheoran.dinesh.quizadmin.model.Category;
@@ -36,7 +37,6 @@ public class CategoryAddFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_category_add, container, false);
         _edTxtAddCategory = view.findViewById(R.id.ed_txt_add_categ);
         Button btnAddCategory = view.findViewById(R.id.btn_add_categ);
-        initFirebase(getContext(),Constants.FIREBASE_CATEGORY_REF);
         btnAddCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,7 +62,8 @@ public class CategoryAddFragment extends BaseFragment {
     }
 
     private void uploadOnFirebase(final String categName){
-        firebaseDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        final DatabaseReference reference = initFirebase(getContext(),Constants.FIREBASE_CATEGORY_REF);
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Category category = new Category(categName);
@@ -70,7 +71,7 @@ public class CategoryAddFragment extends BaseFragment {
                     Toast.makeText(getContext(), "Category already exists !", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    firebaseDatabaseReference.child(categName).setValue(category);
+                    reference.child(categName).setValue(category);
                     Toast.makeText(getContext(), "Category added successfully !", Toast.LENGTH_SHORT).show();
                 }
             }

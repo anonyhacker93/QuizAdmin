@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.sheoran.dinesh.quizadmin.R;
 import com.sheoran.dinesh.quizadmin.model.Questions;
@@ -30,6 +31,7 @@ public class QuestionUpdateFragment extends BaseFragment {
     private TextView _txtOption4;
     private Spinner _spinnerRightAnswer;
     private String _updateQuestioId;
+    private String _questionCateg;
     public QuestionUpdateFragment() {
         // Required empty public constructor
     }
@@ -81,6 +83,7 @@ public class QuestionUpdateFragment extends BaseFragment {
             _txtOption3.setText(questions.getOption3());
             _txtOption4.setText(questions.getOption4());
             _updateQuestioId = questions.getId();
+            _questionCateg = questions.getCategoryName();
             int rightAnsIndex = 0;
             String rightAns = questions.getRightAnswer();
 
@@ -118,17 +121,23 @@ public class QuestionUpdateFragment extends BaseFragment {
         }
 
         if (checkValidFields()) {
-            Questions questions = new Questions(id, ques, option1, option2, option3, option4, rightAns);
+            Questions questions = new Questions(id, ques, option1, option2, option3, option4, rightAns,_questionCateg);
             uploadOnFirebase(questions);
         }
     }
 
     private void uploadOnFirebase(final Questions questions) {
-        firebaseDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        final DatabaseReference reference = initFirebase(getContext(),Constants.FIREBASE_QUESTION_REF);
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.child(questions.getId()).exists()) {
-                    firebaseDatabaseReference.child(questions.getId()).setValue(questions);
+                if (dataSnapshot.child(questions.getCategoryName()).exists()) {
+                  //  reference.child(questions.getCategoryName()).child(questions.getId()).setValue(questions);
+
+                    DatabaseReference categRefer = reference.child(questions.getCategoryName());
+
+                    categRefer.child(questions.getId()).setValue(questions);
+
                     Toast.makeText(getContext(), "Question Updated Successfully !!", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getContext(), "Oh ! unable to Update !!", Toast.LENGTH_SHORT).show();
