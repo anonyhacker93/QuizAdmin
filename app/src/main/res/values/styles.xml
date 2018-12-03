@@ -8,6 +8,13 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- ToolBar -->
+    <style name="ToolBarStyle" parent="Theme.AppCompat">
+        <item name="android:textColorPrimary">@color/light_gray</item>
+        <item name="android:textColorSecondary">@color/light_gray</item>
+        <item name="actionMenuTextColor">@color/light_gray</item>
+    </style>
+
     <style name="both_match_parent">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
