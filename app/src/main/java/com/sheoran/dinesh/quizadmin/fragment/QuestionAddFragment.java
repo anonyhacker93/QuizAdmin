@@ -177,6 +177,7 @@ public class QuestionAddFragment extends BaseFragment {
         option3.setText("");
         option4.setText("");
         answerSpinner.setSelection(0);
+        categorySpinner.setSelection(0);
     }
 
     private void uploadQuestionsOnFirebase(final Questions questions) {

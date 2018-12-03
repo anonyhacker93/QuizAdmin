@@ -7,6 +7,7 @@
 
     <android.support.v7.widget.RecyclerView style="@style/both_match_parent"
         android:id="@+id/categoryDisplayRecycler"
+        android:layout_marginTop="5dp"
         ></android.support.v7.widget.RecyclerView>
 
 
