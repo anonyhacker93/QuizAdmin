@@ -13,11 +13,11 @@
             android:id="@+id/edit_text_question"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:imeOptions="actionNext"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="10dp"
             android:gravity="top"
             android:hint="@string/typeQuestionsHere"
+            android:imeOptions="actionNext"
             android:inputType="text|textImeMultiLine" />
 
         <LinearLayout
@@ -30,66 +30,65 @@
                 android:id="@+id/option1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:imeOptions="actionNext"
-                android:singleLine="true"
                 android:layout_marginTop="10dp"
-                android:hint="@string/option1" />
+                android:hint="@string/option1"
+                android:imeOptions="actionNext"
+                android:singleLine="true" />
 
             <EditText
                 android:id="@+id/option2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:imeOptions="actionNext"
-                android:singleLine="true"
                 android:layout_marginTop="10dp"
-                android:hint="@string/option2" />
+                android:hint="@string/option2"
+                android:imeOptions="actionNext"
+                android:singleLine="true" />
 
             <EditText
                 android:id="@+id/option3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:imeOptions="actionNext"
-                android:singleLine="true"
                 android:layout_marginTop="10dp"
-                android:hint="@string/option3" />
+                android:hint="@string/option3"
+                android:imeOptions="actionNext"
+                android:singleLine="true" />
 
             <EditText
                 android:id="@+id/option4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:imeOptions="actionDone"
-                android:singleLine="true"
                 android:layout_marginTop="10dp"
-                android:hint="@string/option4" />
-          <RelativeLayout
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="horizontal"
+                android:hint="@string/option4"
+                android:imeOptions="actionDone"
+                android:singleLine="true" />
 
-              >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
 
-              <Spinner
-                  android:id="@+id/correctAnsrSpinner"
-                  android:layout_width="wrap_content"
-                  android:layout_height="40dp"
-                  android:layout_marginTop="10dp"
-                  android:layout_marginBottom="10dp"
-                  android:autofillHints="Category"
-                  android:entries="@array/options_entries"
+                >
+
+                <Spinner
+                    android:id="@+id/correctAnsrSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
                     android:layout_alignParentLeft="true"
-                  ></Spinner>
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:autofillHints="Category"
+                    android:entries="@array/options_entries"></Spinner>
 
-              <Spinner
-                  android:id="@+id/spinnerQuestionCateg"
-                  android:layout_width="wrap_content"
-                  android:layout_height="40dp"
-                  android:layout_marginTop="10dp"
-                  android:layout_marginBottom="10dp"
-                  android:autofillHints="Answer"
-                  android:entries="@array/options_Categories"
-                  android:layout_alignParentRight="true"
-                  ></Spinner>
-          </RelativeLayout>
+                <Spinner
+                    android:id="@+id/spinnerQuestionCateg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:autofillHints="Answer"
+                    android:entries="@array/options_Categories"></Spinner>
+            </RelativeLayout>
 
         </LinearLayout>
 
