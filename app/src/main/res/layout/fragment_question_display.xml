@@ -5,8 +5,9 @@
     android:layout_height="match_parent"
     tools:context=".fragment.QuestionDisplayFragment">
 
-    <android.support.v7.widget.RecyclerView style="@style/both_match_parent"
-       android:id="@+id/questionDisplayRecycler"
-        ></android.support.v7.widget.RecyclerView>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/questionDisplayRecycler"
+        style="@style/both_match_parent"
+        android:layout_marginTop="5dp"></android.support.v7.widget.RecyclerView>
 
 </FrameLayout>
