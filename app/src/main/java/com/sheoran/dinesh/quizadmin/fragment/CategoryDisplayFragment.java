@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -53,7 +54,7 @@ public class CategoryDisplayFragment extends BaseFragment implements CategoryRec
         _recyclerView = view.findViewById(R.id.categoryDisplayRecycler);
         init();
         _recyclerAdapter = new CategoryDisplayRecyclerAdapter(getContext(), this, _arrayList);
-        _recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        _recyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
         _recyclerView.setAdapter(_recyclerAdapter);
         return view;
     }

@@ -2,11 +2,11 @@ package com.sheoran.dinesh.quizadmin.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.sheoran.dinesh.quizadmin.R;
@@ -36,20 +36,19 @@ public class QuestionDisplayRecyclerAdapter extends RecyclerView.Adapter<Questio
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int i) {
         final Questions questions = questionsArrayList.get(i);
-        if(questions == null) return;
+        if (questions == null) return;
 
         final String id = questions.getId();
         String ques = questions.getQuestion();
-        holder.txtId.setText(id);
         holder.txtQuestion.setText(ques);
-        holder.linearLayout.setOnLongClickListener(new View.OnLongClickListener() {
+        holder.cardViewContainer.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 _clickListener.onLongClickListener(questions);
                 return true;
             }
         });
-        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+        holder.cardViewContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 _clickListener.onSingleClickListener(questions);
@@ -63,15 +62,13 @@ public class QuestionDisplayRecyclerAdapter extends RecyclerView.Adapter<Questio
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView txtId;
         public TextView txtQuestion;
-        public LinearLayout linearLayout;
+        public CardView cardViewContainer;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            txtId = itemView.findViewById(R.id.txtId);
             txtQuestion = itemView.findViewById(R.id.txtQuestion);
-            linearLayout = itemView.findViewById(R.id.display_linear_layout);
+            cardViewContainer = itemView.findViewById(R.id.cardViewContainer);
         }
     }
 }

@@ -1,21 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    style="@style/width_match_parent"
-    android:orientation="horizontal"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp">
-
-    <TextView
-        android:id="@+id/txtId"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:layout_gravity="center"
-        android:background="@drawable/circle"
-        android:gravity="center"
-        android:text="200"
-        android:textColor="@color/white"
-        android:textSize="16dp" />
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="4dp"
+    android:layout_margin="5dp"
+    android:elevation="3dp"
+    android:id="@+id/cardViewContainer"
+    >
 
     <LinearLayout
         android:id="@+id/display_linear_layout"
@@ -23,8 +15,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
         android:layout_marginHorizontal="10dp"
-        android:background="@drawable/rounded_edittext"
-        android:backgroundTint="@color/light_gray"
         android:orientation="horizontal"
         android:padding="5dp">
 
@@ -35,9 +25,9 @@
             android:layout_gravity="center_vertical"
             android:layout_margin="5dp"
             android:maxLines="1"
-            android:text="asdjasdh askdaksdjkasjaskdak asj skd"
+            android:text="asdjasdh askdaksdjkasjaskaskdaksd jkasjaskdakaskdaksdjkasjaskdakaskdaksdjkasjaskdakaskdaksdjkasjaskdakdak asj skd"
             android:textColor="@color/black"
             android:textSize="16dp" />
 
     </LinearLayout>
-</LinearLayout>
+</android.support.v7.widget.CardView>

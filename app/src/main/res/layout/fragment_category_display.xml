@@ -3,10 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.CategoryDisplayFragment">
+    tools:context=".fragment.CategoryDisplayFragment"
+    android:background="#F8F8F8"
+    >
 
     <android.support.v7.widget.RecyclerView style="@style/both_match_parent"
         android:id="@+id/categoryDisplayRecycler"
+        android:background="#F8F8F8"
+        android:layout_marginHorizontal="5dp"
         android:layout_marginTop="5dp"
         ></android.support.v7.widget.RecyclerView>
 

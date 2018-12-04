@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import android.support.v7.widget.CardView;
 import com.sheoran.dinesh.quizadmin.R;
 import com.sheoran.dinesh.quizadmin.listener.CategoryRecyclerClickListener;
 import com.sheoran.dinesh.quizadmin.model.Category;
@@ -41,14 +41,14 @@ public class CategoryDisplayRecyclerAdapter extends RecyclerView.Adapter<Categor
 
         final String categName = category.getCategoryName();
         holder.txtCateg.setText(categName);
-        holder.linearLayout.setOnLongClickListener(new View.OnLongClickListener() {
+        holder.cardViewContainer.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 _clickListener.onLongClickListener(categName);
                 return true;
             }
         });
-        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+        holder.cardViewContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 _clickListener.onSingleClickListener(categName);
@@ -63,12 +63,12 @@ public class CategoryDisplayRecyclerAdapter extends RecyclerView.Adapter<Categor
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView txtCateg;
-        public LinearLayout linearLayout;
+        public CardView cardViewContainer;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             txtCateg = itemView.findViewById(R.id.txt_category);
-            linearLayout = itemView.findViewById(R.id.category_display_layout);
+            cardViewContainer = itemView.findViewById(R.id.cardViewContainer);
         }
     }
 }
