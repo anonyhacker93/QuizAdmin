@@ -68,7 +68,7 @@ public class CategoryDisplayFragment extends BaseFragment implements CategoryRec
         questionDisplayFragment.setArguments(bundle);
         replaceFragment(questionDisplayFragment,R.id.home_fragment_container);
     }
-
+   //testing git
     @Override
     public void onLongClickListener(String str) {
         deleteCategoryDialog(new Category(str));
