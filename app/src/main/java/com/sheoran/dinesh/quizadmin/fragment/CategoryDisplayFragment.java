@@ -3,6 +3,7 @@ package com.sheoran.dinesh.quizadmin.fragment;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -22,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.sheoran.dinesh.quizadmin.R;
 import com.sheoran.dinesh.quizadmin.adapter.CategoryDisplayRecyclerAdapter;
+import com.sheoran.dinesh.quizadmin.databinding.FragmentCategoryDisplayBinding;
 import com.sheoran.dinesh.quizadmin.firebase.FirebaseHelper;
 import com.sheoran.dinesh.quizadmin.listener.CategoryRecyclerClickListener;
 import com.sheoran.dinesh.quizadmin.model.Category;
@@ -50,13 +52,14 @@ public class CategoryDisplayFragment extends BaseFragment implements CategoryRec
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_category_display, container, false);
-        _recyclerView = view.findViewById(R.id.categoryDisplayRecycler);
+        FragmentCategoryDisplayBinding fragmentBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_category_display, container, false);
+
+        _recyclerView = fragmentBinding.categoryDisplayRecycler;
         init();
         _recyclerAdapter = new CategoryDisplayRecyclerAdapter(getContext(), this, _arrayList);
         _recyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
         _recyclerView.setAdapter(_recyclerAdapter);
-        return view;
+        return fragmentBinding.getRoot();
     }
 
     @Override

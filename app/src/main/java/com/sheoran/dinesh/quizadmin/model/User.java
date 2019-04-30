@@ -1,14 +1,14 @@
 package com.sheoran.dinesh.quizadmin.model;
 
-import com.sheoran.dinesh.quizadmin.firebase.IFirebasable;
 
-public class User implements IFirebasable{
+import java.io.Serializable;
+
+public class User implements Serializable {
     private String name;
     private String email;
     private String password;
 
-    public User() {
-    }
+    public User(){}//Need for firebase
 
     public User(String name, String email, String password) {
         this.name = name;

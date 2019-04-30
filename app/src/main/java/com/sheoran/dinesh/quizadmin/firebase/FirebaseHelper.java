@@ -8,31 +8,28 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class FirebaseHelper {
-    private DatabaseReference _databaseReference;
+    protected DatabaseReference _databaseReference;
 
     public FirebaseHelper(Context context, String referenceName) {
         initFirebase(context, referenceName);
     }
 
-    /**
-     * @param context
-     * @param referenceName name of pointing node/child in firebase
-     */
     private void initFirebase(Context context, String referenceName) {
         FirebaseApp.initializeApp(context);
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         _databaseReference = firebaseDatabase.getReference(referenceName);
     }
 
+    protected DatabaseReference getDatabaseReference(Context context,String referenceName){
+        FirebaseApp.initializeApp(context);
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        return firebaseDatabase.getReference(referenceName);
+    }
+
     public DatabaseReference getDatabaseReference() {
         return _databaseReference;
     }
 
-    /**
-     * @param context
-     * @param childName name of node which need to be remove from firebase
-     * @return true if delete node succesfully from firebase
-     */
     public boolean deleteNode(Context context, String childName) {
         try {
             if (_databaseReference.child(childName) != null) {

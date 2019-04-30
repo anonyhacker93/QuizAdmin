@@ -2,7 +2,6 @@ package com.sheoran.dinesh.quizadmin.fragment;
 
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,17 +11,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 import com.sheoran.dinesh.quizadmin.R;
+import com.sheoran.dinesh.quizadmin.firebase.QuestionFirebaseHelper;
 import com.sheoran.dinesh.quizadmin.model.Questions;
 import com.sheoran.dinesh.quizadmin.util.Constants;
 
 public class QuestionUpdateFragment extends BaseFragment {
     public final static String QUESTIONS_KEY = "Questions Key";
-
+    public QuestionFirebaseHelper questionFirebaseHelper;
     private Button _btnUpdate;
     private TextView _txtQuestion;
     private TextView _txtOption1;
@@ -32,6 +28,7 @@ public class QuestionUpdateFragment extends BaseFragment {
     private Spinner _spinnerRightAnswer;
     private String _updateQuestioId;
     private String _questionCateg;
+
     public QuestionUpdateFragment() {
         // Required empty public constructor
     }
@@ -39,7 +36,9 @@ public class QuestionUpdateFragment extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        questionFirebaseHelper = QuestionFirebaseHelper.getInstance(getContext(), (msg -> {
+            Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+        }));
     }
 
     @Override
@@ -48,7 +47,6 @@ public class QuestionUpdateFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_question_update, container, false);
         _updateQuestioId = null;
         initViews(view);
-        initFirebase(getContext(), Constants.FIREBASE_QUESTION_REF);
         Bundle bundle = getArguments();
         if (bundle != null) {
             Questions questions = (Questions) bundle.getSerializable(QUESTIONS_KEY);
@@ -121,36 +119,12 @@ public class QuestionUpdateFragment extends BaseFragment {
         }
 
         if (checkValidFields()) {
-            Questions questions = new Questions(id, ques, option1, option2, option3, option4, rightAns,_questionCateg);
-            uploadOnFirebase(questions);
+            Questions questions = new Questions(ques, option1, option2, option3, option4, rightAns, _questionCateg);
+            questions.setId(id);
+            questionFirebaseHelper.updateQuestion(questions);
         }
     }
 
-    private void uploadOnFirebase(final Questions questions) {
-        final DatabaseReference reference = initFirebase(getContext(),Constants.FIREBASE_QUESTION_REF);
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.child(questions.getCategoryName()).exists()) {
-                  //  reference.child(questions.getCategoryName()).child(questions.getId()).setValue(questions);
-
-                    DatabaseReference categRefer = reference.child(questions.getCategoryName());
-
-                    categRefer.child(questions.getId()).setValue(questions);
-
-                    Toast.makeText(getContext(), "Question Updated Successfully !!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getContext(), "Oh ! unable to Update !!", Toast.LENGTH_SHORT).show();
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getContext(), "Error :" + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
     private boolean checkValidFields() {
         boolean isValid = true;
@@ -163,9 +137,9 @@ public class QuestionUpdateFragment extends BaseFragment {
             errorMsg = R.string.enterAllOptions;
         } else if (_spinnerRightAnswer.getSelectedItem().equals("----Correct answer----")) {
             isValid = false;
-            errorMsg =  R.string.markCorrectAnswer;
+            errorMsg = R.string.markCorrectAnswer;
         }
-        if(errorMsg != -999){
+        if (errorMsg != -999) {
             Toast.makeText(getContext(), errorMsg, Toast.LENGTH_SHORT).show();
         }
         return isValid;

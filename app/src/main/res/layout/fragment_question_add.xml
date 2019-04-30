@@ -1,108 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/both_match_parent"
-    android:orientation="vertical">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
+<layout>
+<data></data>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        style="@style/both_match_parent"
         android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/edit_text_question"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="10dp"
-            android:gravity="top"
-            android:hint="@string/typeQuestionHere"
-            android:imeOptions="actionNext"
-            android:inputType="text|textImeMultiLine"
-            android:singleLine="false" />
-
         <LinearLayout
-            style="@style/both_match_parent"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
             android:orientation="vertical">
 
             <EditText
-                android:id="@+id/option1"
+                android:id="@+id/editTextQuestion"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="100dp"
+                android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="10dp"
-                android:hint="@string/option1"
+                android:gravity="top"
+                android:hint="@string/typeQuestionHere"
                 android:imeOptions="actionNext"
-                android:singleLine="true" />
-
-            <EditText
-                android:id="@+id/option2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:hint="@string/option2"
-                android:imeOptions="actionNext"
-                android:singleLine="true" />
-
-            <EditText
-                android:id="@+id/option3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:hint="@string/option3"
-                android:imeOptions="actionNext"
-                android:singleLine="true" />
-
-            <EditText
-                android:id="@+id/option4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:hint="@string/option4"
-                android:imeOptions="actionDone"
-                android:singleLine="true" />
+                android:inputType="text|textImeMultiLine"
+                android:singleLine="false" />
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2">
+                style="@style/both_match_parent"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
+                android:orientation="vertical">
 
-                <Spinner
-                    android:id="@+id/correctAnsrSpinner"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginBottom="10dp"
+                <EditText
+                    android:id="@+id/option1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:layout_weight="1"
-                    android:autofillHints="Category"
-                    android:entries="@array/options_entries">
-                </Spinner>
+                    android:hint="@string/option1"
+                    android:imeOptions="actionNext"
+                    android:singleLine="true" />
 
-                <Spinner
-                    android:id="@+id/spinnerQuestionCateg"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginBottom="10dp"
+                <EditText
+                    android:id="@+id/option2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:layout_weight="1"
-                    android:autofillHints="Answer"
-                    android:entries="@array/options_Categories">
-                </Spinner>
+                    android:hint="@string/option2"
+                    android:imeOptions="actionNext"
+                    android:singleLine="true" />
+
+                <EditText
+                    android:id="@+id/option3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="@string/option3"
+                    android:imeOptions="actionNext"
+                    android:singleLine="true" />
+
+                <EditText
+                    android:id="@+id/option4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="@string/option4"
+                    android:imeOptions="actionDone"
+                    android:singleLine="true" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <Spinner
+                        android:id="@+id/correctAnsrSpinner"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
+                        android:autofillHints="Category"
+                        android:entries="@array/options_entries"></Spinner>
+
+                    <Spinner
+                        android:id="@+id/spinnerQuestionCateg"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
+                        android:autofillHints="Answer"
+                        android:entries="@array/options_Categories"></Spinner>
+                </LinearLayout>
+
             </LinearLayout>
 
+            <Button
+                android:id="@+id/addQuestionBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/add_question" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/addQuestionBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/add_question" />
     </LinearLayout>
 
-</LinearLayout>
-
+</layout>

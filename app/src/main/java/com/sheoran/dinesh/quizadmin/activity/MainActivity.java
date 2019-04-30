@@ -17,18 +17,17 @@ public class MainActivity extends BaseActivity {
         //Initial default Fragment
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         HomeFragment homeFragment = new HomeFragment();
-        transaction.add(R.id.home_fragment_container,homeFragment,"HomeFragment");
+        transaction.add(R.id.home_fragment_container, homeFragment, "HomeFragment");
         transaction.addToBackStack(null);
         transaction.commit();
     }
 
 
-
     @Override
     public void onBackPressed() {
         Fragment homeFragment = getSupportFragmentManager().findFragmentByTag("HomeFragment");
-        if(homeFragment != null && !homeFragment.isVisible())
-          super.onBackPressed();
+        if (homeFragment != null && !homeFragment.isVisible())
+            super.onBackPressed();
         else
             finish();
     }
