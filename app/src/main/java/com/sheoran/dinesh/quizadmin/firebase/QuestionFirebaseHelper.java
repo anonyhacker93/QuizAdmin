@@ -19,9 +19,8 @@ import java.util.ListIterator;
 public class QuestionFirebaseHelper extends FirebaseHelper {
     private static QuestionFirebaseHelper _instance;
     private DatabaseReference _idDatabaseReference;
-    private static IToast _iToast;
     private int idNo;
-    private IDataLoadNotifier _dataLoadNotifier;
+    private IDatabaseMonitor _dataLoadNotifier;
     private ArrayList<Questions> _questionArrayList = new ArrayList<>();
 
     public QuestionFirebaseHelper(Context context) {
@@ -72,7 +71,7 @@ public class QuestionFirebaseHelper extends FirebaseHelper {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                _iToast.create("Error :" + databaseError.getMessage());
+
             }
         });
     }
@@ -88,18 +87,19 @@ public class QuestionFirebaseHelper extends FirebaseHelper {
                     categRefer.child(questions.getId()).setValue(questions);
                     Log.d(Constants.LOG_TAG, "QuestionFirebaseHelper : updateQuestion onDataChange done");
 
-                    if (iDataLoadNotifier != null) {
-                        iDataLoadNotifier.onDataLoad(true);
+                    if (iDatabaseMonitor != null) {
+                        iDatabaseMonitor.onDatabaseChange(true, "Update successfully !");
                     }
                 } else {
+                    iDatabaseMonitor.onDatabaseChange(false, "Unable to update !");
                     Log.d(Constants.LOG_TAG, "QuestionFirebaseHelper : updateQuestion onDataChange category already exists");
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e(Constants.LOG_TAG, "QuestionFirebaseHelper : updateQuestion onCancelled "+databaseError.getMessage());
-                iDataLoadNotifier.onDataLoad(false);
+                Log.e(Constants.LOG_TAG, "QuestionFirebaseHelper : updateQuestion onCancelled " + databaseError.getMessage());
+                iDatabaseMonitor.onDatabaseChange(false, "Error:Unable to update");
             }
         });
     }
@@ -123,14 +123,16 @@ public class QuestionFirebaseHelper extends FirebaseHelper {
                     _questionArrayList.add(questions);
                 }
                 Log.d(Constants.LOG_TAG, "QuestionFirebaseHelper : fetchQuestionsByCategoryName onDataChange");
-                _dataLoadNotifier.onDataLoad(true);
+                if (_dataLoadNotifier != null) {
+                    _dataLoadNotifier.onDatabaseChange(true, "Category fetched");
+                }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.d(Constants.LOG_TAG, "QuestionFirebaseHelper : Exception : " + databaseError.getMessage());
                 if (_dataLoadNotifier != null) {
-                    _dataLoadNotifier.onDataLoad(false);
+                    _dataLoadNotifier.onDatabaseChange(false, "Unable to fetch category");
                 }
             }
         });
@@ -191,7 +193,7 @@ public class QuestionFirebaseHelper extends FirebaseHelper {
     }
 
     @Override
-    public void setDataNotifier(IDataLoadNotifier dataLoadNotifier) {
+    public void setDataNotifier(IDatabaseMonitor dataLoadNotifier) {
         _dataLoadNotifier = dataLoadNotifier;
     }
 

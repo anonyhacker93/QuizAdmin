@@ -85,14 +85,14 @@ public class QuestionAddFragment extends BaseFragment {
 
         _categoryFirebaseHelper.requestLoadCategory();
 
-        _categoryFirebaseHelper.setDataNotifier((isSuccess) -> {
+        _categoryFirebaseHelper.setDataNotifier((isSuccess,msg) -> {
             if (isSuccess) {
                 addCategoryToSpinner();
             } else {
                 Toast.makeText(QuestionAddFragment.this.getContext(), "Unable to load category", Toast.LENGTH_SHORT).show();
             }
-
             _progressDialog.dismiss();
+            Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
         });
 
 
@@ -111,6 +111,11 @@ public class QuestionAddFragment extends BaseFragment {
         categorySpinner.setAdapter(categoryDropdownAdapter);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        _categoryFirebaseHelper.setDataNotifier(null);
+    }
 
     private boolean checkValidFields() {
         boolean isValid = true;

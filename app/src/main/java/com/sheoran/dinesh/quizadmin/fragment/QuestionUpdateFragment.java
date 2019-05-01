@@ -39,15 +39,13 @@ public class QuestionUpdateFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         questionFirebaseHelper = firebaseInstanceManager.getQuestionFirebaseHelper();
 
-        questionFirebaseHelper.setDataNotifier(isSuccess -> {
-            if(isSuccess) {
-                Toast.makeText(getContext(), "Question updated successfully !", Toast.LENGTH_SHORT).show();
-                if (getFragmentManager().getBackStackEntryCount() > 0) {
-                    getFragmentManager().popBackStackImmediate();
-                }
-            }else{
-                Toast.makeText(getContext(), "Unable to update !", Toast.LENGTH_SHORT).show();
-            }
+        questionFirebaseHelper.setDataNotifier((isSuccess, msg) -> {
+                    if (isSuccess) {
+                        if (getFragmentManager().getBackStackEntryCount() > 0) {
+                            getFragmentManager().popBackStackImmediate();
+                        }
+                    }
+                    Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
                 }
 
         );
@@ -116,7 +114,7 @@ public class QuestionUpdateFragment extends BaseFragment {
     }
 
     public void updateQuestion(String id) {
-        Log.d(Constants.LOG_TAG,"QuestionUpdateFragment : updateQuestion "+id);
+        Log.d(Constants.LOG_TAG, "QuestionUpdateFragment : updateQuestion " + id);
         String ques = _txtQuestion.getText().toString();
         String option1 = _txtOption1.getText().toString();
         String option2 = _txtOption2.getText().toString();

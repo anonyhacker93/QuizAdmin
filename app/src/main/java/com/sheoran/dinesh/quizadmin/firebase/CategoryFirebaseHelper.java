@@ -19,7 +19,7 @@ public class CategoryFirebaseHelper extends FirebaseHelper {
 
     private static CategoryFirebaseHelper _instance;
     private ArrayList<Category> _categoryArrayList;
-    private IDataLoadNotifier _iDataLoadNotifier;
+    private IDatabaseMonitor _iDatabaseMonitor;
 
     private CategoryFirebaseHelper(Context context) {
         super(context, Constants.FIREBASE_CATEGORY_REF);
@@ -67,8 +67,8 @@ public class CategoryFirebaseHelper extends FirebaseHelper {
                     }
                 }
 
-                if (_iDataLoadNotifier != null) {
-                    _iDataLoadNotifier.onDataLoad(true);
+                if (_iDatabaseMonitor != null) {
+                    _iDatabaseMonitor.onDatabaseChange(true,"Load successfully !");
                     Log.d(Constants.LOG_TAG, "CategoryFirebaseHelper : requestLoadCategory : load successfully !");
                 }
             }
@@ -76,7 +76,7 @@ public class CategoryFirebaseHelper extends FirebaseHelper {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                _iDataLoadNotifier.onDataLoad(false);
+                _iDatabaseMonitor.onDatabaseChange(false,"Error:Unable to load");
                 Log.d(Constants.LOG_TAG, "CategoryFirebaseHelper : requestLoadCategory : " + databaseError.getMessage());
             }
         });
@@ -99,7 +99,7 @@ public class CategoryFirebaseHelper extends FirebaseHelper {
     }
 
     @Override
-    public void setDataNotifier(IDataLoadNotifier dataLoadNotifier) {
-        _iDataLoadNotifier = dataLoadNotifier;
+    public void setDataNotifier(IDatabaseMonitor dataLoadNotifier) {
+        _iDatabaseMonitor = dataLoadNotifier;
     }
 }

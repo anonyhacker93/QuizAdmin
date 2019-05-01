@@ -10,7 +10,7 @@ import com.sheoran.dinesh.quizadmin.util.Constants;
 
 abstract public class FirebaseHelper {
     protected DatabaseReference _databaseReference;
-    protected IDataLoadNotifier iDataLoadNotifier;
+    protected IDatabaseMonitor iDatabaseMonitor;
 
     public FirebaseHelper(Context context, String referenceName) {
         initFirebase(context, referenceName);
@@ -35,24 +35,23 @@ abstract public class FirebaseHelper {
         try {
             if (_databaseReference.child(childName) != null) {
                 _databaseReference.child(childName).removeValue();
-                if (iDataLoadNotifier != null) {
-                    iDataLoadNotifier.onDataLoad(true);
+                if (iDatabaseMonitor != null) {
+                    iDatabaseMonitor.onDatabaseChange(true,"Deleted successfully !");
                 }
                 return true;
             }
         } catch (Exception ex) {
-            if (iDataLoadNotifier != null) {
-                iDataLoadNotifier.onDataLoad(false);
+            if (iDatabaseMonitor != null) {
+                iDatabaseMonitor.onDatabaseChange(false,"Unable to delete");
             }
         }
         return false;
     }
 
 
-    abstract public void setDataNotifier(IDataLoadNotifier dataLoadNotifier);
+    abstract public void setDataNotifier(IDatabaseMonitor dataLoadNotifier);
 
-    public interface IDataLoadNotifier {
-        void onDataLoad(boolean isSuccess);
-       /// void dataChangeMessage(String msg);
+    public interface IDatabaseMonitor {
+        void onDatabaseChange(boolean isSuccess,String msg);
     }
 }

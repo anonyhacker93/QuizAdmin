@@ -60,6 +60,12 @@ public class CategoryDisplayFragment extends BaseFragment implements CategoryRec
         return fragmentBinding.getRoot();
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        _categoryFirebaseHelper.setDataNotifier(null);
+    }
+
     private void init() {
         Log.d(Constants.LOG_TAG,"CategoryDisplayFragment :: init ");
         _categoryArrayList = new ArrayList<>();
@@ -67,22 +73,24 @@ public class CategoryDisplayFragment extends BaseFragment implements CategoryRec
         _categoryFirebaseHelper = firebaseInstanceManager.getCategoryFirebaseHelper();
 
         _categoryFirebaseHelper.requestLoadCategory();
-        _categoryFirebaseHelper.setDataNotifier((isSuccess -> {
+        _categoryFirebaseHelper.setDataNotifier((isSuccess,msg) -> {
             if (isSuccess) {
             Log.d(Constants.LOG_TAG,"CategoryDisplayFragment :: init : setDataNotifier ");
                 loadCategory();
 
             } else {
-                Toast.makeText(getContext(), "Unable to load categories", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getContext(), "Unable to load categories", Toast.LENGTH_SHORT).show();
             }
+            Toast.makeText(CategoryDisplayFragment.this.getContext(),""+msg, Toast.LENGTH_SHORT).show();
+
             _progressDialog.dismiss();
-        }));
+
+        });
 
     }
 
     @Override
     public void onSingleClickListener(String str) {
-        Toast.makeText(getContext(), "Edit Categ", Toast.LENGTH_SHORT).show();
         Log.d(Constants.LOG_TAG,"CategoryDisplayFragment :: onSingleClickListener ");
         Bundle bundle = new Bundle();
         bundle.putSerializable(CATEGORY_KEY, new Category(str));

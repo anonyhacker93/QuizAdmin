@@ -78,7 +78,7 @@ public class QuestionDisplayFragment extends BaseFragment implements QuestionRec
 
         setRecyclerViewAdapter();
 
-        _questionFirebaseHelper.setDataNotifier((isSuccess -> {
+        _questionFirebaseHelper.setDataNotifier((isSuccess,msg) -> {
             if (isSuccess) {
                 ArrayList<Questions> questionsList = _questionFirebaseHelper.getAllQuestionsList();
                 questionArrayList.clear();
@@ -88,10 +88,16 @@ public class QuestionDisplayFragment extends BaseFragment implements QuestionRec
                 Log.d(Constants.LOG_TAG, "QuestionDisplayFragment init questions loaded");
             } else {
                 Log.d(Constants.LOG_TAG, "QuestionDisplayFragment init unable to load questions");
-                Toast.makeText(this.getContext(), "Unable to load questions", Toast.LENGTH_SHORT).show();
             }
             _loadDataProgressDialog.dismiss();
-        }));
+            Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        _questionFirebaseHelper.setDataNotifier(null);
     }
 
     private void setRecyclerViewAdapter() {
