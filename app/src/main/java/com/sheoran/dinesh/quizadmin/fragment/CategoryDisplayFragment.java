@@ -73,6 +73,7 @@ public class CategoryDisplayFragment extends BaseFragment implements CategoryRec
         _categoryFirebaseHelper = firebaseInstanceManager.getCategoryFirebaseHelper();
 
         _categoryFirebaseHelper.requestLoadCategory();
+        _progressDialog.show();
         _categoryFirebaseHelper.setDataNotifier((isSuccess,msg) -> {
             if (isSuccess) {
             Log.d(Constants.LOG_TAG,"CategoryDisplayFragment :: init : setDataNotifier ");
