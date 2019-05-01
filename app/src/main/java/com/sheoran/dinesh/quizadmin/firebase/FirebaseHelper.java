@@ -20,7 +20,6 @@ abstract public class FirebaseHelper {
         FirebaseApp.initializeApp(context);
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         _databaseReference = firebaseDatabase.getReference(referenceName);
-        Log.d(Constants.LOG_TAG,"FirebaseHelper : deleteNode");
     }
 
     protected DatabaseReference getDatabaseReference(Context context, String referenceName) {

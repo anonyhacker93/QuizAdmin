@@ -41,7 +41,7 @@ public class CategoryFirebaseHelper extends FirebaseHelper {
                 if (dataSnapshot.child(categName).exists()) {
                 } else {
                     _databaseReference.child(categName).setValue(category);
-                    requestLoadCategory();
+                    Log.d(Constants.LOG_TAG,"CategoryFirebaseHelper addCategory");
                 }
             }
 
@@ -58,6 +58,7 @@ public class CategoryFirebaseHelper extends FirebaseHelper {
         _databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot ds) {
+                _categoryArrayList.clear();
                 Iterator<DataSnapshot> itr = ds.getChildren().iterator();
                 while (itr.hasNext()) {
                     DataSnapshot shot = itr.next();

@@ -3,6 +3,7 @@ package com.sheoran.dinesh.quizadmin.fragment;
 import android.app.ProgressDialog;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.sheoran.dinesh.quizadmin.databinding.FragmentQuestionAddBinding;
 import com.sheoran.dinesh.quizadmin.firebase.CategoryFirebaseHelper;
 import com.sheoran.dinesh.quizadmin.firebase.QuestionFirebaseHelper;
 import com.sheoran.dinesh.quizadmin.model.Questions;
+import com.sheoran.dinesh.quizadmin.util.Constants;
 import com.sheoran.dinesh.quizadmin.util.ProgressDialogUtil;
 
 import java.util.ArrayList;
@@ -76,7 +78,7 @@ public class QuestionAddFragment extends BaseFragment {
 
 
     private void init() {
-
+        Log.d(Constants.LOG_TAG,"QuestionAddFragment init");
         _progressDialog = ProgressDialogUtil.getProgressDialog(getContext(), "Please wait", "Loading");
         _progressDialog.show();
 
