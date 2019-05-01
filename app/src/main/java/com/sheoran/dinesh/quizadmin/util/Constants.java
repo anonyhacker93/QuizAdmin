@@ -6,5 +6,5 @@ public class Constants {
     public static final String FIREBASE_CATEGORY_REF = "Category";
     public static final String FIREBASE_ID_NO_REF = "IdNo";
     public static final double VERSION = 1.4;
-    public static final String LOG_TAG = "QuizAdminTag";
+    public static final String LOG_TAG = "QuizAdminTag ";
 }

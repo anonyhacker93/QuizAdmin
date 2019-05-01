@@ -1,14 +1,16 @@
 package com.sheoran.dinesh.quizadmin.firebase;
 
 import android.content.Context;
-import android.widget.Toast;
+import android.util.Log;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.sheoran.dinesh.quizadmin.util.Constants;
 
-public class FirebaseHelper {
+abstract public class FirebaseHelper {
     protected DatabaseReference _databaseReference;
+    protected IDataLoadNotifier iDataLoadNotifier;
 
     public FirebaseHelper(Context context, String referenceName) {
         initFirebase(context, referenceName);
@@ -18,48 +20,39 @@ public class FirebaseHelper {
         FirebaseApp.initializeApp(context);
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         _databaseReference = firebaseDatabase.getReference(referenceName);
+        Log.d(Constants.LOG_TAG,"FirebaseHelper : deleteNode");
     }
 
-    protected DatabaseReference getDatabaseReference(Context context,String referenceName){
+    protected DatabaseReference getDatabaseReference(Context context, String referenceName) {
         FirebaseApp.initializeApp(context);
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         return firebaseDatabase.getReference(referenceName);
     }
 
-    public DatabaseReference getDatabaseReference() {
-        return _databaseReference;
-    }
 
-    public boolean deleteNode(Context context, String childName) {
+    public boolean deleteNode(String childName) {
+        Log.d(Constants.LOG_TAG,"FirebaseHelper : deleteNode");
         try {
             if (_databaseReference.child(childName) != null) {
                 _databaseReference.child(childName).removeValue();
+                if (iDataLoadNotifier != null) {
+                    iDataLoadNotifier.onDataLoad(true);
+                }
                 return true;
             }
-            {
-                Toast.makeText(context, "This value does not exist in database", Toast.LENGTH_SHORT).show();
-                return false;
-            }
         } catch (Exception ex) {
-            Toast.makeText(context, "This value does not exist in database", Toast.LENGTH_SHORT).show();
+            if (iDataLoadNotifier != null) {
+                iDataLoadNotifier.onDataLoad(false);
+            }
         }
         return false;
     }
 
-    public boolean deleteNode(Context context,String parentName,String childName){
-        try {
-            if (_databaseReference.child(parentName) != null) {
-                _databaseReference.child(parentName).child(childName).removeValue();
-                return true;
-            }
-            {
-                Toast.makeText(context, "This value does not exist in database", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-        } catch (Exception ex) {
-            Toast.makeText(context, "This value does not exist in database", Toast.LENGTH_SHORT).show();
-        }
-        return false;
 
+    abstract public void setDataNotifier(IDataLoadNotifier dataLoadNotifier);
+
+    public interface IDataLoadNotifier {
+        void onDataLoad(boolean isSuccess);
+       /// void dataChangeMessage(String msg);
     }
 }

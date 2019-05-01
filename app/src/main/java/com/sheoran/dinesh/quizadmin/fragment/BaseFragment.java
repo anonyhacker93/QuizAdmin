@@ -7,13 +7,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import com.google.firebase.database.DatabaseReference;
+import com.sheoran.dinesh.quizadmin.FirebaseInstanceManager;
 import com.sheoran.dinesh.quizadmin.firebase.FirebaseHelper;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class BaseFragment extends Fragment {
-
+    protected FirebaseInstanceManager firebaseInstanceManager;
     public BaseFragment() {
         // Required empty public constructor
     }
@@ -21,14 +22,10 @@ public class BaseFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        firebaseInstanceManager = FirebaseInstanceManager.getInstance(getContext());
     }
 
 
-    protected DatabaseReference initFirebase(Context context, String databaseReference) {
-        FirebaseHelper firebaseHelper = new FirebaseHelper(context,databaseReference);
-        DatabaseReference firebaseDatabaseReference = firebaseHelper.getDatabaseReference();
-        return firebaseDatabaseReference;
-    }
 
     protected void replaceFragment(Fragment fragment,int container) {
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();

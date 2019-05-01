@@ -3,6 +3,7 @@ package com.sheoran.dinesh.quizadmin.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,9 +37,20 @@ public class QuestionUpdateFragment extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        questionFirebaseHelper = QuestionFirebaseHelper.getInstance(getContext(), (msg -> {
-            Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
-        }));
+        questionFirebaseHelper = firebaseInstanceManager.getQuestionFirebaseHelper();
+
+        questionFirebaseHelper.setDataNotifier(isSuccess -> {
+            if(isSuccess) {
+                Toast.makeText(getContext(), "Question updated successfully !", Toast.LENGTH_SHORT).show();
+                if (getFragmentManager().getBackStackEntryCount() > 0) {
+                    getFragmentManager().popBackStackImmediate();
+                }
+            }else{
+                Toast.makeText(getContext(), "Unable to update !", Toast.LENGTH_SHORT).show();
+            }
+                }
+
+        );
     }
 
     @Override
@@ -46,7 +58,9 @@ public class QuestionUpdateFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_question_update, container, false);
         _updateQuestioId = null;
+
         initViews(view);
+
         Bundle bundle = getArguments();
         if (bundle != null) {
             Questions questions = (Questions) bundle.getSerializable(QUESTIONS_KEY);
@@ -54,6 +68,7 @@ public class QuestionUpdateFragment extends BaseFragment {
                 setQuestion(questions);
             }
         }
+
         return view;
     }
 
@@ -101,6 +116,7 @@ public class QuestionUpdateFragment extends BaseFragment {
     }
 
     public void updateQuestion(String id) {
+        Log.d(Constants.LOG_TAG,"QuestionUpdateFragment : updateQuestion "+id);
         String ques = _txtQuestion.getText().toString();
         String option1 = _txtOption1.getText().toString();
         String option2 = _txtOption2.getText().toString();
@@ -124,7 +140,6 @@ public class QuestionUpdateFragment extends BaseFragment {
             questionFirebaseHelper.updateQuestion(questions);
         }
     }
-
 
     private boolean checkValidFields() {
         boolean isValid = true;

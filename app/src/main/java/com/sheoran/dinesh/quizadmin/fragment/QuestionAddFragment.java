@@ -1,5 +1,6 @@
 package com.sheoran.dinesh.quizadmin.fragment;
 
+import android.app.ProgressDialog;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,7 +17,7 @@ import com.sheoran.dinesh.quizadmin.databinding.FragmentQuestionAddBinding;
 import com.sheoran.dinesh.quizadmin.firebase.CategoryFirebaseHelper;
 import com.sheoran.dinesh.quizadmin.firebase.QuestionFirebaseHelper;
 import com.sheoran.dinesh.quizadmin.model.Questions;
-import com.sheoran.dinesh.quizadmin.util.Constants;
+import com.sheoran.dinesh.quizadmin.util.ProgressDialogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,7 @@ public class QuestionAddFragment extends BaseFragment {
     private Spinner categorySpinner;
     private QuestionFirebaseHelper _questionFirebaseHelper;
     private CategoryFirebaseHelper _categoryFirebaseHelper;
+    private ProgressDialog _progressDialog;
 
     public QuestionAddFragment() {
 
@@ -55,13 +57,16 @@ public class QuestionAddFragment extends BaseFragment {
         option2 = binding.option2;
         option3 = binding.option3;
         option4 = binding.option4;
+
         answerSpinner = binding.correctAnsrSpinner;
         categorySpinner = binding.spinnerQuestionCateg;
+
         init();
 
         submitQuestion.setOnClickListener((View v) -> {
             if (checkValidFields()) {
                 saveQuestion();
+
                 resetAllFields();
             }
         });
@@ -69,23 +74,38 @@ public class QuestionAddFragment extends BaseFragment {
         return binding.getRoot();
     }
 
+
     private void init() {
-        _categoryFirebaseHelper = CategoryFirebaseHelper.getInstance(getContext(), (msg) -> {
-         //   Toast.makeText(QuestionAddFragment.this.getContext(), msg, Toast.LENGTH_SHORT).show();
-        });
-        _questionFirebaseHelper = QuestionFirebaseHelper.getInstance(getContext(), (msg) -> {
-      //      Toast.makeText(QuestionAddFragment.this.getContext(), msg, Toast.LENGTH_SHORT).show();
+
+        _progressDialog = ProgressDialogUtil.getProgressDialog(getContext(), "Please wait", "Loading");
+        _progressDialog.show();
+
+        _questionFirebaseHelper = firebaseInstanceManager.getQuestionFirebaseHelper();
+        _categoryFirebaseHelper = firebaseInstanceManager.getCategoryFirebaseHelper();
+
+        _categoryFirebaseHelper.requestLoadCategory();
+
+        _categoryFirebaseHelper.setDataNotifier((isSuccess) -> {
+            if (isSuccess) {
+                addCategoryToSpinner();
+            } else {
+                Toast.makeText(QuestionAddFragment.this.getContext(), "Unable to load category", Toast.LENGTH_SHORT).show();
+            }
+
+            _progressDialog.dismiss();
         });
 
-        addCategoryToSpinner();
+
         _questionFirebaseHelper.incrementId();
-        addOptionsToSpinner();
 
+        addQuestionOptionsToSpinner();
     }
 
     private void addCategoryToSpinner() {
         List<String> categoryNamesList = _categoryFirebaseHelper.getCategoryNames();
+
         ArrayAdapter<String> categoryDropdownAdapter;
+
         categoryDropdownAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, categoryNamesList);
         categoryDropdownAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categorySpinner.setAdapter(categoryDropdownAdapter);
@@ -95,18 +115,23 @@ public class QuestionAddFragment extends BaseFragment {
     private boolean checkValidFields() {
         boolean isValid = true;
         int errorMsg = -999;
+
         if (question.length() == 0) {
             isValid = false;
             errorMsg = R.string.enterQuestion;
+
         } else if (option1.length() == 0 || option2.length() == 0 || option3.length() == 0 || option4.length() == 0) {
             isValid = false;
             errorMsg = R.string.enterAllOptions;
+
         } else if (answerSpinner.getSelectedItemPosition() == 0) {
             isValid = false;
             errorMsg = R.string.markCorrectAnswer;
+
         } else if (categorySpinner.getSelectedItemPosition() == 0) {
             isValid = false;
             errorMsg = R.string.enterCategory;
+
         }
         if (errorMsg != -999) {
             Toast.makeText(getContext(), errorMsg, Toast.LENGTH_SHORT).show();
@@ -122,6 +147,7 @@ public class QuestionAddFragment extends BaseFragment {
         String opt4 = option4.getText().toString();
         int indx = answerSpinner.getSelectedItemPosition();
         String categoryName = (String) categorySpinner.getSelectedItem();
+
         String ans = null;
 
         if (indx == 1) {
@@ -138,15 +164,17 @@ public class QuestionAddFragment extends BaseFragment {
         _questionFirebaseHelper.addQuestion(questions);
     }
 
-    private void addOptionsToSpinner() {
+    private void addQuestionOptionsToSpinner() {
         List<String> list = new ArrayList<String>();
         list.add("Answer");
         list.add("Option 1");
         list.add("Option 2");
         list.add("Option 3");
         list.add("Option 4");
+
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         answerSpinner.setAdapter(dataAdapter);
 
     }
@@ -157,6 +185,7 @@ public class QuestionAddFragment extends BaseFragment {
         option2.setText("");
         option3.setText("");
         option4.setText("");
+
         answerSpinner.setSelection(0);
         categorySpinner.setSelection(0);
     }

@@ -7,7 +7,6 @@ import android.util.Log;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.sheoran.dinesh.quizadmin.IToast;
 import com.sheoran.dinesh.quizadmin.model.Category;
 import com.sheoran.dinesh.quizadmin.util.Constants;
 
@@ -19,21 +18,17 @@ import java.util.List;
 public class CategoryFirebaseHelper extends FirebaseHelper {
 
     private static CategoryFirebaseHelper _instance;
-    private static IToast _iToast;
     private ArrayList<Category> _categoryArrayList;
-
+    private IDataLoadNotifier _iDataLoadNotifier;
 
     private CategoryFirebaseHelper(Context context) {
         super(context, Constants.FIREBASE_CATEGORY_REF);
     }
 
-    public static CategoryFirebaseHelper getInstance(Context context, IToast iToast) {
+    public static CategoryFirebaseHelper getInstance(Context context) {
         if (_instance == null) {
-
             _instance = new CategoryFirebaseHelper(context);
-            _instance.loadCategories();
         }
-        _iToast = iToast;
         return _instance;
     }
 
@@ -44,22 +39,21 @@ public class CategoryFirebaseHelper extends FirebaseHelper {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Category category = new Category(categName);
                 if (dataSnapshot.child(categName).exists()) {
-                    _iToast.create("Category already exists !");
                 } else {
                     _databaseReference.child(categName).setValue(category);
-                    _iToast.create("Category added successfully !");
-                    loadCategories();
+                    requestLoadCategory();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                _iToast.create("Oh ! Unable to access : " + databaseError.getMessage());
+
             }
         });
     }
 
-    private void loadCategories() {
+    public void requestLoadCategory() {
+        Log.d(Constants.LOG_TAG, "CategoryFirebaseHelper : requestLoadCategory : start");
         _categoryArrayList = new ArrayList<>();
         _databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -72,14 +66,24 @@ public class CategoryFirebaseHelper extends FirebaseHelper {
                         _categoryArrayList.add(category);
                     }
                 }
-                Log.d("QuizAdmin", "CategoryFirebaseHelper : loadCategories : load successfully !");
+
+                if (_iDataLoadNotifier != null) {
+                    _iDataLoadNotifier.onDataLoad(true);
+                    Log.d(Constants.LOG_TAG, "CategoryFirebaseHelper : requestLoadCategory : load successfully !");
+                }
             }
+
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.d("QuizAdmin", "CategoryFirebaseHelper : loadCategories : " + databaseError.getMessage());
+                _iDataLoadNotifier.onDataLoad(false);
+                Log.d(Constants.LOG_TAG, "CategoryFirebaseHelper : requestLoadCategory : " + databaseError.getMessage());
             }
         });
+    }
+
+    public void deleteCategory(Category category) {
+        deleteNode(category.getCategoryName());
     }
 
     public ArrayList<Category> getCategoryList() {
@@ -94,4 +98,8 @@ public class CategoryFirebaseHelper extends FirebaseHelper {
         return categoryNameList;
     }
 
+    @Override
+    public void setDataNotifier(IDataLoadNotifier dataLoadNotifier) {
+        _iDataLoadNotifier = dataLoadNotifier;
+    }
 }

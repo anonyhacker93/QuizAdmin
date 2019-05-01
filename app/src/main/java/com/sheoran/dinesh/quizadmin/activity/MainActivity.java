@@ -16,6 +16,7 @@ public class MainActivity extends BaseActivity {
         setToolbar();
         //Initial default Fragment
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
         HomeFragment homeFragment = new HomeFragment();
         transaction.add(R.id.home_fragment_container, homeFragment, "HomeFragment");
         transaction.addToBackStack(null);
