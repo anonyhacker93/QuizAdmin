@@ -1,78 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/both_match_parent"
-    android:orientation="vertical">
-
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<data>
+    <variable
+        name="QuestionInstance"
+        type="com.sheoran.dinesh.quizadmin.model.Questions"></variable>
+</data>
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
+        style="@style/both_match_parent"
         android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/edit_text_question"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="10dp"
-            android:gravity="top"
-            android:hint="@string/typeQuestionHere"
-            android:inputType="text|textMultiLine" />
-
         <LinearLayout
-            style="@style/both_match_parent"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
             android:orientation="vertical">
 
             <EditText
-                android:id="@+id/option1"
+                android:id="@+id/edit_text_question"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="100dp"
+                android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="10dp"
-                android:hint="@string/option1" />
+                android:gravity="top"
+                android:hint="@string/typeQuestionHere"
+                android:inputType="text|textMultiLine"
+                android:text="@{QuestionInstance.question}"/>
 
-            <EditText
-                android:id="@+id/option2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:hint="@string/option2" />
+            <LinearLayout
+                style="@style/both_match_parent"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
+                android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/option3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:hint="@string/option3" />
+                <EditText
+                    android:id="@+id/option1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="@string/option1"
+                    android:text="@{QuestionInstance.option1}"/>
 
-            <EditText
-                android:id="@+id/option4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:hint="@string/option4" />
+                <EditText
+                    android:id="@+id/option2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="@string/option2"
+                    android:text="@{QuestionInstance.option2}"/>
 
-            <Spinner
-                android:id="@+id/correctAnsrSpinner"
+                <EditText
+                    android:id="@+id/option3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="@string/option3"
+                    android:text="@{QuestionInstance.option3}"/>
+
+                <EditText
+                    android:id="@+id/option4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="@string/option4"
+                    android:text="@{QuestionInstance.option4}"/>
+
+                <Spinner
+                    android:id="@+id/correctAnsrSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="37dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:autofillHints="Right Option"
+                    android:entries="@array/options_entries"
+                    ></Spinner>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/updateQuestionBtn"
                 android:layout_width="wrap_content"
-                android:layout_height="37dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:autofillHints="Right Option"
-                android:entries="@array/options_entries"
-
-                ></Spinner>
+                android:text="@string/update_question" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/updateQuestionBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/update_question" />
     </LinearLayout>
-
-</LinearLayout>
-
+</layout>

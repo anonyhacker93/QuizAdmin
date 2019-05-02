@@ -1,15 +1,14 @@
 package com.sheoran.dinesh.quizadmin.adapter;
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.support.v7.widget.CardView;
+
 import com.sheoran.dinesh.quizadmin.R;
+import com.sheoran.dinesh.quizadmin.databinding.RowCategoryDisplayBinding;
 import com.sheoran.dinesh.quizadmin.listener.CategoryRecyclerClickListener;
 import com.sheoran.dinesh.quizadmin.model.Category;
 
@@ -30,29 +29,24 @@ public class CategoryDisplayRecyclerAdapter extends RecyclerView.Adapter<Categor
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.row_category_display, viewGroup, false);
-        return new MyViewHolder(view);
+        RowCategoryDisplayBinding binding = DataBindingUtil.inflate(LayoutInflater.from(viewGroup.getContext()), R.layout.row_category_display, viewGroup, false);
+        return new MyViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int i) {
         Category category = categoryArrayList.get(i);
-        if(category == null) return;
+        if (category == null) return;
 
-        final String categName = category.getCategoryName();
-        holder.txtCateg.setText(categName);
-        holder.cardViewContainer.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                _clickListener.onLongClickListener(categName);
-                return true;
-            }
+        holder.binding.setCategoryInstance(category);
+
+        holder.binding.cardViewContainer.setOnLongClickListener((v) -> {
+            _clickListener.onLongClickListener(holder.binding.txtCategory.getText().toString());
+            return true;
         });
-        holder.cardViewContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                _clickListener.onSingleClickListener(categName);
-            }
+
+        holder.binding.cardViewContainer.setOnClickListener((v) -> {
+            _clickListener.onSingleClickListener(holder.binding.txtCategory.getText().toString());
         });
     }
 
@@ -62,13 +56,12 @@ public class CategoryDisplayRecyclerAdapter extends RecyclerView.Adapter<Categor
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView txtCateg;
-        public CardView cardViewContainer;
 
-        public MyViewHolder(@NonNull View itemView) {
-            super(itemView);
-            txtCateg = itemView.findViewById(R.id.txt_category);
-            cardViewContainer = itemView.findViewById(R.id.cardViewContainer);
+        RowCategoryDisplayBinding binding;
+
+        public MyViewHolder(@NonNull RowCategoryDisplayBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 }

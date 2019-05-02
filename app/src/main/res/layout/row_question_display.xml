@@ -1,33 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="4dp"
-    android:layout_margin="5dp"
-    android:elevation="3dp"
-    android:id="@+id/cardViewContainer"
-    >
+<layout>
+<data>
+    <variable
+        name="QuestionInstance"
+        type="com.sheoran.dinesh.quizadmin.model.Questions"/>
+</data>
 
-    <LinearLayout
-        android:id="@+id/display_linear_layout"
-        style="@style/width_match_parent"
+    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cardViewContainer"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        android:layout_marginHorizontal="10dp"
-        android:orientation="horizontal"
-        android:padding="5dp">
+        android:layout_margin="5dp"
+        android:elevation="3dp"
+        app:cardCornerRadius="4dp">
 
-        <TextView
-            android:id="@+id/txtQuestion"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:id="@+id/display_linear_layout"
+            style="@style/width_match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="5dp"
-            android:maxLines="1"
-            android:text="asdjasdh askdaksdjkasjaskaskdaksd jkasjaskdakaskdaksdjkasjaskdakaskdaksdjkasjaskdakaskdaksdjkasjaskdakdak asj skd"
-            android:textColor="@color/black"
-            android:textSize="16dp" />
+            android:layout_margin="2dp"
+            android:layout_marginHorizontal="10dp"
+            android:orientation="horizontal"
+            android:padding="5dp">
 
-    </LinearLayout>
-</android.support.v7.widget.CardView>
+            <TextView
+                android:id="@+id/txtQuestion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="5dp"
+                android:maxLines="1"
+                android:text="@{QuestionInstance.question}"
+                android:textColor="@color/black"
+                android:textSize="16dp" />
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</layout>

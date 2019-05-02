@@ -78,7 +78,7 @@ public class QuestionDisplayFragment extends BaseFragment implements QuestionRec
 
         setRecyclerViewAdapter();
 
-        _questionFirebaseHelper.setDataNotifier((isSuccess,msg) -> {
+        _questionFirebaseHelper.setDataNotifier((isSuccess, msg) -> {
             if (isSuccess) {
                 ArrayList<Questions> questionsList = _questionFirebaseHelper.getAllQuestionsList();
                 questionArrayList.clear();
@@ -146,18 +146,12 @@ public class QuestionDisplayFragment extends BaseFragment implements QuestionRec
 
         AlertDialog.Builder deleteQuestionDialog = new AlertDialog.Builder(getContext());
         deleteQuestionDialog.setMessage(getResources().getString(R.string.deleteSelectedQuestion));
-        deleteQuestionDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                deleteQuestion(questions);
-            }
+        deleteQuestionDialog.setPositiveButton("Yes", (DialogInterface dialog, int which) -> {
+            deleteQuestion(questions);
         });
 
-        deleteQuestionDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
+        deleteQuestionDialog.setNegativeButton("Cancel", (DialogInterface dialog, int which) -> {
+            dialog.dismiss();
         });
 
 

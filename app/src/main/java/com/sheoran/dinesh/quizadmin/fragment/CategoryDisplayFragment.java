@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.sheoran.dinesh.quizadmin.FirebaseInstanceManager;
 import com.sheoran.dinesh.quizadmin.R;
 import com.sheoran.dinesh.quizadmin.adapter.CategoryDisplayRecyclerAdapter;
 import com.sheoran.dinesh.quizadmin.databinding.FragmentCategoryDisplayBinding;
@@ -36,7 +35,6 @@ public class CategoryDisplayFragment extends BaseFragment implements CategoryRec
     private CategoryDisplayRecyclerAdapter _recyclerAdapter;
     private ArrayList<Category> _categoryArrayList;
     private CategoryFirebaseHelper _categoryFirebaseHelper;
-
     private ProgressDialog _progressDialog;
 
     public CategoryDisplayFragment() {
@@ -48,7 +46,7 @@ public class CategoryDisplayFragment extends BaseFragment implements CategoryRec
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         FragmentCategoryDisplayBinding fragmentBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_category_display, container, false);
-        Log.d(Constants.LOG_TAG,"CategoryDisplayFragment :: onCreateView ");
+        Log.d(Constants.LOG_TAG, "CategoryDisplayFragment :: onCreateView ");
         _recyclerView = fragmentBinding.categoryDisplayRecycler;
 
         init();
@@ -67,22 +65,21 @@ public class CategoryDisplayFragment extends BaseFragment implements CategoryRec
     }
 
     private void init() {
-        Log.d(Constants.LOG_TAG,"CategoryDisplayFragment :: init ");
+        Log.d(Constants.LOG_TAG, "CategoryDisplayFragment :: init ");
         _categoryArrayList = new ArrayList<>();
         _progressDialog = ProgressDialogUtil.getProgressDialog(getContext(), "Loading", "Please wait");
         _categoryFirebaseHelper = firebaseInstanceManager.getCategoryFirebaseHelper();
 
         _categoryFirebaseHelper.requestLoadCategory();
         _progressDialog.show();
-        _categoryFirebaseHelper.setDataNotifier((isSuccess,msg) -> {
+
+        _categoryFirebaseHelper.setDataNotifier((isSuccess, msg) -> {
             if (isSuccess) {
-            Log.d(Constants.LOG_TAG,"CategoryDisplayFragment :: init : setDataNotifier ");
+                Log.d(Constants.LOG_TAG, "CategoryDisplayFragment :: init : setDataNotifier ");
                 loadCategory();
 
-            } else {
-               // Toast.makeText(getContext(), "Unable to load categories", Toast.LENGTH_SHORT).show();
             }
-            Toast.makeText(CategoryDisplayFragment.this.getContext(),""+msg, Toast.LENGTH_SHORT).show();
+            Toast.makeText(CategoryDisplayFragment.this.getContext(), "" + msg, Toast.LENGTH_SHORT).show();
 
             _progressDialog.dismiss();
 
@@ -92,7 +89,7 @@ public class CategoryDisplayFragment extends BaseFragment implements CategoryRec
 
     @Override
     public void onSingleClickListener(String str) {
-        Log.d(Constants.LOG_TAG,"CategoryDisplayFragment :: onSingleClickListener ");
+        Log.d(Constants.LOG_TAG, "CategoryDisplayFragment :: onSingleClickListener ");
         Bundle bundle = new Bundle();
         bundle.putSerializable(CATEGORY_KEY, new Category(str));
         QuestionDisplayFragment questionDisplayFragment = new QuestionDisplayFragment();
@@ -100,33 +97,30 @@ public class CategoryDisplayFragment extends BaseFragment implements CategoryRec
         replaceFragment(questionDisplayFragment, R.id.home_fragment_container);
     }
 
-    //testing git
     @Override
     public void onLongClickListener(String str) {
         deleteCategoryDialog(new Category(str));
     }
 
     private void deleteCategoryDialog(final Category category) {
-        Log.d(Constants.LOG_TAG,"CategoryDisplayFragment :: deleteCategoryDialog ");
+        Log.d(Constants.LOG_TAG, "CategoryDisplayFragment :: deleteCategoryDialog ");
+
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
         alertDialog.setMessage(getResources().getString(R.string.deleteSelectedCategory) + " " + category.getCategoryName() + "?");
-        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                deleteCategory(category);
-            }
+
+        alertDialog.setPositiveButton("Yes", (DialogInterface dialog, int which) -> {
+            deleteCategory(category);
         });
-        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
+
+        alertDialog.setNegativeButton("Cancel", (DialogInterface dialog, int which) -> {
+            dialog.dismiss();
         });
+
         alertDialog.show();
     }
 
     private void deleteCategory(final Category category) {
-        Log.d(Constants.LOG_TAG,"CategoryDisplayFragment :: deleteCategory ");
+        Log.d(Constants.LOG_TAG, "CategoryDisplayFragment :: deleteCategory ");
         _categoryFirebaseHelper.deleteCategory(category);
 
 
@@ -143,9 +137,8 @@ public class CategoryDisplayFragment extends BaseFragment implements CategoryRec
 
     }
 
-
     private void loadCategory() {
-        Log.d(Constants.LOG_TAG,"CategoryDisplayFragment :: loadCategory ");
+        Log.d(Constants.LOG_TAG, "CategoryDisplayFragment :: loadCategory ");
         ArrayList<Category> categoryArrayList = _categoryFirebaseHelper.getCategoryList();
         _categoryArrayList.clear();
         _categoryArrayList.addAll(categoryArrayList);

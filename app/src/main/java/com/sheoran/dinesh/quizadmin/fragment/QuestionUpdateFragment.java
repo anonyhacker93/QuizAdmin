@@ -1,18 +1,18 @@
 package com.sheoran.dinesh.quizadmin.fragment;
 
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sheoran.dinesh.quizadmin.R;
+import com.sheoran.dinesh.quizadmin.databinding.FragmentQuestionUpdateBinding;
 import com.sheoran.dinesh.quizadmin.firebase.QuestionFirebaseHelper;
 import com.sheoran.dinesh.quizadmin.model.Questions;
 import com.sheoran.dinesh.quizadmin.util.Constants;
@@ -20,15 +20,9 @@ import com.sheoran.dinesh.quizadmin.util.Constants;
 public class QuestionUpdateFragment extends BaseFragment {
     public final static String QUESTIONS_KEY = "Questions Key";
     public QuestionFirebaseHelper questionFirebaseHelper;
-    private Button _btnUpdate;
-    private TextView _txtQuestion;
-    private TextView _txtOption1;
-    private TextView _txtOption2;
-    private TextView _txtOption3;
-    private TextView _txtOption4;
+
     private Spinner _spinnerRightAnswer;
-    private String _updateQuestioId;
-    private String _questionCateg;
+
 
     public QuestionUpdateFragment() {
         // Required empty public constructor
@@ -38,63 +32,50 @@ public class QuestionUpdateFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         questionFirebaseHelper = firebaseInstanceManager.getQuestionFirebaseHelper();
-
-        questionFirebaseHelper.setDataNotifier((isSuccess, msg) -> {
-                    if (isSuccess) {
-                        if (getFragmentManager().getBackStackEntryCount() > 0) {
-                            getFragmentManager().popBackStackImmediate();
-                        }
-                    }
-                    Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
-                }
-
-        );
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_question_update, container, false);
-        _updateQuestioId = null;
+        FragmentQuestionUpdateBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_question_update, container, false);
 
-        initViews(view);
+        _spinnerRightAnswer = binding.correctAnsrSpinner;
 
+        questionFirebaseHelper.setDataNotifier((isSuccess, msg) -> {
+                    if (isSuccess) {
+                        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+                        if (getFragmentManager().getBackStackEntryCount() > 0) {
+                            getFragmentManager().popBackStackImmediate();
+                        }
+                    }
+
+                }
+
+        );
         Bundle bundle = getArguments();
         if (bundle != null) {
             Questions questions = (Questions) bundle.getSerializable(QUESTIONS_KEY);
             if (questions != null) {
-                setQuestion(questions);
+                binding.setQuestionInstance(questions);
+                setAnswerSpinner(questions);
+
+                binding.updateQuestionBtn.setOnClickListener((v -> {
+                    updateQuestion(binding);
+                }));
             }
         }
 
-        return view;
+        return binding.getRoot();
     }
 
-    private void initViews(View view) {
-        _txtQuestion = view.findViewById(R.id.edit_text_question);
-        _txtOption1 = view.findViewById(R.id.option1);
-        _txtOption2 = view.findViewById(R.id.option2);
-        _txtOption3 = view.findViewById(R.id.option3);
-        _txtOption4 = view.findViewById(R.id.option4);
-        _spinnerRightAnswer = view.findViewById(R.id.correctAnsrSpinner);
-        _btnUpdate = view.findViewById(R.id.updateQuestionBtn);
-        _btnUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateQuestion(_updateQuestioId);
-            }
-        });
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        questionFirebaseHelper.setDataNotifier(null);
     }
 
-    private void setQuestion(Questions questions) {
+    private void setAnswerSpinner(Questions questions) {
         if (questions != null) {
-            _txtQuestion.setText(questions.getQuestion());
-            _txtOption1.setText(questions.getOption1());
-            _txtOption2.setText(questions.getOption2());
-            _txtOption3.setText(questions.getOption3());
-            _txtOption4.setText(questions.getOption4());
-            _updateQuestioId = questions.getId();
-            _questionCateg = questions.getCategoryName();
             int rightAnsIndex = 0;
             String rightAns = questions.getRightAnswer();
 
@@ -113,49 +94,57 @@ public class QuestionUpdateFragment extends BaseFragment {
         }
     }
 
-    public void updateQuestion(String id) {
-        Log.d(Constants.LOG_TAG, "QuestionUpdateFragment : updateQuestion " + id);
-        String ques = _txtQuestion.getText().toString();
-        String option1 = _txtOption1.getText().toString();
-        String option2 = _txtOption2.getText().toString();
-        String option3 = _txtOption3.getText().toString();
-        String option4 = _txtOption4.getText().toString();
+    public void updateQuestion(FragmentQuestionUpdateBinding binding) {
+        Log.d(Constants.LOG_TAG, "QuestionUpdateFragment : updateQuestion ");
+
+        Questions question = binding.getQuestionInstance();
+
         int rightAnsIndx = _spinnerRightAnswer.getSelectedItemPosition();
+
+
+        if(!fieldsValidator(binding)){
+            return;
+        }
+        question.setId(question.getId());
+        question.setQuestion(binding.editTextQuestion.getText().toString());
+        question.setOption1(binding.option1.getText().toString());
+        question.setOption2(binding.option2.getText().toString());
+        question.setOption3(binding.option3.getText().toString());
+        question.setOption4(binding.option4.getText().toString());
+
         String rightAns;
         if (rightAnsIndx == 1) {
-            rightAns = option1;
+            rightAns = question.getOption1();
+
         } else if (rightAnsIndx == 2) {
-            rightAns = option2;
+            rightAns = question.getOption2();
+
         } else if (rightAnsIndx == 3) {
-            rightAns = option3;
+            rightAns = question.getOption3();
+
         } else {
-            rightAns = option4;
-        }
+            rightAns = question.getOption4();
 
-        if (checkValidFields()) {
-            Questions questions = new Questions(ques, option1, option2, option3, option4, rightAns, _questionCateg);
-            questions.setId(id);
-            questionFirebaseHelper.updateQuestion(questions);
         }
+        question.setRightAnswer(rightAns);
+
+        questionFirebaseHelper.updateQuestion(question);
+        //  }
     }
 
-    private boolean checkValidFields() {
-        boolean isValid = true;
-        int errorMsg = -999;
-        if (_txtQuestion.length() == 0) {
-            isValid = false;
-            errorMsg = R.string.enterQuestion;
-        } else if (_txtOption1.length() == 0 || _txtOption2.length() == 0 || _txtOption3.length() == 0 || _txtOption4.length() == 0) {
-            isValid = false;
-            errorMsg = R.string.enterAllOptions;
-        } else if (_spinnerRightAnswer.getSelectedItem().equals("----Correct answer----")) {
-            isValid = false;
-            errorMsg = R.string.markCorrectAnswer;
+    private boolean fieldsValidator(FragmentQuestionUpdateBinding binding) {
+        if (binding.editTextQuestion.getText().toString().isEmpty() || binding.option1.getText().toString().isEmpty()
+                || binding.option2.getText().toString().isEmpty() || binding.option3.getText().toString().isEmpty()
+                || binding.option4.getText().toString().isEmpty()){
+            Toast.makeText(getContext(), "Please fill all fields", Toast.LENGTH_SHORT).show();
+            return false;
         }
-        if (errorMsg != -999) {
-            Toast.makeText(getContext(), errorMsg, Toast.LENGTH_SHORT).show();
+        if(binding.correctAnsrSpinner.getSelectedItemPosition() == 0){
+            Toast.makeText(getContext(), "Please select answer", Toast.LENGTH_SHORT).show();
+            return false;
         }
-        return isValid;
+        return true;
     }
+
 
 }
