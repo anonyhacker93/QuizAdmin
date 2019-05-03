@@ -31,7 +31,6 @@ public class QuestionFirebaseHelper extends FirebaseHelper {
     public static QuestionFirebaseHelper getInstance(Context context) {
         if (_instance == null) {
             _instance = new QuestionFirebaseHelper(context);
-            _instance.idNo = Constants.INITIAL_ID;
         }
         return _instance;
     }
@@ -44,7 +43,7 @@ public class QuestionFirebaseHelper extends FirebaseHelper {
                 if (id != null) {
                     idNo = Integer.parseInt(id.toString());
                 } else {
-                    idNo = 1;
+                    idNo = Constants.INITIAL_ID;
                 }
                 idNo++;
                 _idDatabaseReference.setValue(idNo);

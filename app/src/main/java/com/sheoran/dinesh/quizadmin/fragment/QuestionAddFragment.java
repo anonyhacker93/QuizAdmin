@@ -97,7 +97,7 @@ public class QuestionAddFragment extends BaseFragment {
         });
 
 
-        _questionFirebaseHelper.incrementId();
+       // _questionFirebaseHelper.incrementId();
 
         addQuestionOptionsToSpinner();
     }
